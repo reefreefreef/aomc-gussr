@@ -1,21 +1,51 @@
 #root {
-    margin-left: 10%;
-    margin-right: 10%;
+    min-height: 100vh;
+    background-color: var(--background);
 
+
+}
+
+.main-content {
     background-color: var(--background-accent);
-
-    color: white;
-
+    
     padding-bottom: 100px;
-
     border-left: 0.5px solid rgba(255, 255, 255, 0.475);
     border-right: 0.5px solid rgba(255, 255, 255, 0.475);
+    overflow-y: auto;
     
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 70%;
+
+    min-height: 100vh;
+
+}
+
+#archive-content {
+    margin-top: 50px;
+}
+
+.wrapper {
+    display: flex;
+    
+}
+
+.sidebar {
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: calc((100vw - 1024px)/2);
+    padding: 30px;
+}
+
+th {
+    padding: 10px;
 }
 
 body {
     margin: 0%;
     background-color: var(--background);
+
+    color: white;
 
     font-family: Inter Var,Inter,-apple-system,BlinkMacSystemFont,San Francisco,Segoe UI,Roboto,Helvetica Neue,sans-serif;
 }
@@ -74,4 +104,12 @@ input {
 button {
     background-color: var(--background);
     color: white;
+}
+
+a:visited {
+    color: white;
+} 
+
+#archivePersonalResults {
+    text-align: center;
 }

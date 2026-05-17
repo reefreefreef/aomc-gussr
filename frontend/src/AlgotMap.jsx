@@ -12,18 +12,16 @@ export default function AlgotMap({ options }) {
 
     var previousMarker = null;
 
-    if (options.previous) {
-        useEffect(() => {
-            if (bearerToken) {
-                console.log('gettting')
-                getGuess(1, (e) => {
-                    console.log("gotten", e)
-                    options.setPrevious(e.previousGuess)
-                    console.log(previousMarker)
-                })
-            }
-        }, [bearerToken])
-    }
+    useEffect(() => {
+        if (bearerToken) {
+            console.log('gettting')
+            getGuess(1, (e) => {
+                console.log("gotten", e)
+                if (options.setPrevious) options.setPrevious(e.previousGuess)
+            })
+        }
+    }, [bearerToken])
+    
 
     useEffect(() => {
 
@@ -77,7 +75,7 @@ export default function AlgotMap({ options }) {
                 const guess = options.otherGuesses[i];
                 const guessCoords = JSON.parse(guess.guess)
 
-                var previousSelection = L.marker([guessCoords.x, guessCoords.x]).addTo(map);
+                var previousSelection = L.marker([guessCoords.x, guessCoords.y]).addTo(map);
 
                 previousSelection.bindTooltip(guess.user)
             }
@@ -90,8 +88,17 @@ export default function AlgotMap({ options }) {
                 fillColor: "#0f0"
             }).addTo(map);
 
-            previousSelection.bindTooltip("Previous Selection")
+            previousSelection.bindTooltip("Current Selection")
 
+        }
+
+        if (options.ownGuess) {
+            var latlngs = [
+                [options.ownGuess.own.x, options.ownGuess.own.y],
+                [options.ownGuess.answer.x, options.ownGuess.answer.y]
+            ];
+
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
         }
 
 
@@ -129,7 +136,7 @@ export default function AlgotMap({ options }) {
         return () => {
             map.remove();
         };
-    }, [options.previous]);
+    }, [options.previous, options]);
 
     return (<div id="map"></div>)
 }

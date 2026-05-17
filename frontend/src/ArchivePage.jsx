@@ -7,7 +7,7 @@ import AlgotMap from './AlgotMap';
 function ChallengeImage({ imagePath }) {
     const { APIUrl } = useAuth();
 
-    return <img src={APIUrl+"/images/"+imagePath} id="current-image" />
+    return <img src={APIUrl + "/images/" + imagePath} id="current-image" />
 }
 
 
@@ -16,19 +16,62 @@ function ChallengeInfo({ challengeInfo }) {
     if (challengeInfo) {
 
         if (challengeInfo.revealed) {
-            return <div>
-                    {JSON.stringify(challengeInfo)}
-                    <ChallengeImage imagePath={challengeInfo.id}/>
+
+            function r(n) { return Math.round(n) }
+            const answer = JSON.parse(challengeInfo.answer)
+            console.log(challengeInfo, answer)
+
+            return <div className="centre-flex" id="archivePersonalResults">
+
+                <h1>Answer: ({answer.x}, {answer.y})</h1>
+
+                {(challengeInfo.personalGuess) ? (<span>
+
+
+                    
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><h3>Your Guess</h3></th>
+                                <th><h3>Distance</h3></th>
+                                <th><h3>Score</h3></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{r(challengeInfo.personalGuess.own.x)}, {r(challengeInfo.personalGuess.own.y)}</td>
+                                <td>{r(challengeInfo.personalGuess.dst)}</td>
+                                <td>_</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    </span>
+
+                ) : ("")}
+
+                <div style={{marginTop: "50px"}}>
+                    <span>{challengeInfo.title}</span><br />
+                    <ChallengeImage imagePath={challengeInfo.id} />
+                    
+                </div>
+
+                <div id="guess-content" className="centre-flex">
                     <AlgotMap options={{
                         answer: challengeInfo.answer,
-                        otherGuesses:challengeInfo.guesses
-                    }}/>
+                        otherGuesses: challengeInfo.guesses,
+                        ownGuess: challengeInfo.personalGuess,
+                    }} />
                 </div>
+
+            </div>
         } else {
-            return <div>
-                    {JSON.stringify(challengeInfo)}
-                    <ChallengeImage imagePath={challengeInfo.id}/>
-                </div>
+            return <div id="guess-content" className="centre-flex">
+                <h2>Location not yet revealed.</h2>
+                <ChallengeImage imagePath={challengeInfo.id} />
+            </div>
         }
     } else {
         return ""
@@ -36,6 +79,7 @@ function ChallengeInfo({ challengeInfo }) {
 }
 
 export default function ArchivePage() {
+    const { bearerToken } = useAuth();
 
     const [searchParams] = useSearchParams()
     const id = searchParams.get("id")
@@ -44,15 +88,15 @@ export default function ArchivePage() {
 
     const { getChallenge } = useAuth();
 
-    useEffect(()=>{
-        console.log(getChallenge(id, (e)=>{
+    useEffect(() => {
+        console.log(getChallenge(id, (e) => {
             setChallengeInfo(e)
         }))
-    }, [])
+    }, [bearerToken, id])
 
     return (
-        <div id="main-content" class="centre-flex">
-      <ChallengeInfo challengeInfo={challengeInfo}/>
-    </div>
+        <div id="archive-content" className="centre-flex">
+            <ChallengeInfo challengeInfo={challengeInfo} />
+        </div>
     )
 }

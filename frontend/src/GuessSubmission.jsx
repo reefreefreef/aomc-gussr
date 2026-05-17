@@ -33,7 +33,7 @@ export default function GuessSubmission() {
 
 
     return (
-        <div id="guess-content" class="centre-flex">
+        <div id="guess-content" className="centre-flex">
             <AlgotMap options={{
                 input:setSelectedCoords,
                 setPrevious:setPreviousGuess,

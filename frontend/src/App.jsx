@@ -7,6 +7,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from './LandingPage.jsx';
 import ArchivePage from './ArchivePage.jsx';
 
+import Navbar from './Navbar.jsx';
+import Leaderboard from './Leaderboard.jsx';
+
+
 const router = createBrowserRouter([
   { path: '/', Component: LandingPage },
   { path: '/archive', Component: ArchivePage },
@@ -17,12 +21,24 @@ function App() {
 
 
   return (
-    <div>
-      <div class="section centre-flex">
-        <Auth />
-      </div>
-      <RouterProvider router={router} />
+    <div className="wrapper">
 
+        <div className="sidebar">
+            <Navbar router={router}/>
+
+        </div>
+        
+        <main className="main-content">
+            <div className="section centre-flex">
+                <Auth />
+            </div>
+            <RouterProvider router={router} />
+        </main>
+        
+        <div className="sidebar">
+            <Leaderboard />
+
+        </div>
     </div>
 
     )

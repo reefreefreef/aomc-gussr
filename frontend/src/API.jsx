@@ -11,10 +11,10 @@ export const AuthProvider = ({ children }) => {
     const [authUsername, setAuthUsername] = useState(null);
     const APIUrl = "http://localhost:3000/api"
 
-    const submitCreds = function(username, password) {
+    const submitCreds = function (username, password) {
         console.log("submitting ", username, password)
 
-        fetch(APIUrl+"/login", 
+        fetch(APIUrl + "/login",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
@@ -22,9 +22,9 @@ export const AuthProvider = ({ children }) => {
                     "username": username,
                     "password": password
                 })
-            }).then((res)=>{
+            }).then((res) => {
                 return res.json();
-            }).then((res)=>{
+            }).then((res) => {
                 if (res.error) {
                     alert(res.message)
                 } else if (res.token) {
@@ -33,36 +33,36 @@ export const AuthProvider = ({ children }) => {
                     setAuthUsername(res.username)
                     localStorage.setItem("creds", JSON.stringify({
                         token: token,
-                        username:res.username,
+                        username: res.username,
                     }))
                 }
             })
     }
-    const logout = function() {
+    const logout = function () {
         setBearerToken(null)
         localStorage.setItem("creds", null)
         console.log("hopefully logged out", bearerToken)
     }
-    const submitGuess = function(selectedCoords) {
+    const submitGuess = function (selectedCoords) {
         console.log("submitting", bearerToken)
         if (!bearerToken) {
             console.error("no auth token")
             return 0
         }
-        fetch(APIUrl+"/submitGuess", 
+        fetch(APIUrl + "/submitGuess",
             {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
+                headers: {
+                    "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
-                    "guess":selectedCoords,
+                    "guess": selectedCoords,
                 })
-            }).then((res)=>{
+            }).then((res) => {
                 return res.json();
-            }).then((res)=>{
+            }).then((res) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
@@ -70,24 +70,24 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
-    const getGuess = function(challenge, next) {
+    const getGuess = function (challenge, next) {
         if (!bearerToken) {
             console.error("no auth token")
             return 0
         }
-        fetch(APIUrl+"/getGuess", 
+        fetch(APIUrl + "/getGuess",
             {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
+                headers: {
+                    "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
                 })
-            }).then((res)=>{
+            }).then((res) => {
                 return res.json();
-            }).then((res)=>{
+            }).then((res) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
@@ -96,20 +96,40 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
-    const getChallenge = function(challenge, next) {
-        fetch(APIUrl+"/getChallenge", 
+    const getChallenge = function (challenge, next) {
+        fetch(APIUrl + "/getChallenge",
             {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
+                headers: {
+                    "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
+                    'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
-                    challenge:challenge,
+                    challenge: challenge,
                 })
-            }).then((res)=>{
+            }).then((res) => {
                 return res.json();
-            }).then((res)=>{
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    console.log(res)
+                    next(res)
+                }
+            })
+    }
+    const getChallenges = function (next) {
+        fetch(APIUrl + "/getChallenges",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
@@ -121,14 +141,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         var storedToken = localStorage.getItem("creds")
-        
-        if (storedToken!=null) {
+
+        if (storedToken != null) {
             try {
                 storedToken = JSON.parse(storedToken)
             } catch {
                 console.error("malformed stored token")
-            } 
-            if (storedToken!=null) {
+            }
+            if (storedToken != null) {
                 console.log(storedToken)
                 setBearerToken(storedToken.token)
                 setAuthUsername(storedToken.username)
@@ -139,7 +159,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername}}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername }}>
             {children}
         </AuthContext.Provider>
     )
