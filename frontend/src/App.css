@@ -1,0 +1,74 @@
+#root {
+    margin-left: 10%;
+    margin-right: 10%;
+
+    background-color: var(--background-accent);
+
+    color: white;
+
+    padding-bottom: 100px;
+    
+}
+
+body {
+    margin: 0%;
+    background-color: var(--background);
+
+    font-family: Inter Var,Inter,-apple-system,BlinkMacSystemFont,San Francisco,Segoe UI,Roboto,Helvetica Neue,sans-serif;
+}
+
+#current-image {
+    width: 70%;
+    margin: 20px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.32);
+}
+
+#map-section {
+    width: 100%;
+}
+
+#guess-content {
+    width: 100%;
+}
+
+#map {
+    height: 500px; 
+    width: 80%;
+    border-radius: 5px;
+    background-color: black;
+    margin-bottom: 20px;
+}
+
+.centre-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.section {
+    margin: 0%;
+    padding: 15px;
+    width: 100%;
+
+}
+
+#selectedCoords {
+    padding: 10px;
+} 
+#selectedSubmit {
+
+}
+#loggedIn {
+    padding: 10px;
+}
+#logout {
+
+}
+
+input {
+    background-color: var(--background);
+    color: white;
+}
+button {
+    background-color: var(--background);
+    color: white;
+}

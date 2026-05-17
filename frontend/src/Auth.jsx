@@ -27,8 +27,8 @@ function AuthBar() {
             </span>
     } else {
         return <span>
-                Logged in with: {authUsername}
-                <button
+                <span id="loggedIn">Logged in as {authUsername}</span>
+                <button id="logout"
                 onClick={()=>logout()}
                 >Logout</button>
             </span>

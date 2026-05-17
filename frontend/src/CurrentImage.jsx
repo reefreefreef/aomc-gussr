@@ -1,12 +1,11 @@
 import { useState } from "react"
+import { useAuth } from './API';
 
 export default function CurrentImage() {
-
-    const [BACKEND, setBackend] = useState("http://pi.warmsandybeaches.net/api")
+    const { APIUrl } = useAuth();
+    const [BACKEND, setBackend] = useState(APIUrl)
 
     return (
-        <div>
-            <img style={{height: "200px"}} src={BACKEND+"/current"} id="current-image" />
-        </div>
+        <img src={BACKEND+"/current"} id="current-image" />
     )
 }

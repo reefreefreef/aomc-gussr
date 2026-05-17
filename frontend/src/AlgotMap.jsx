@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
-import {CRS, Transformation, Canvas, Map, TileLayer, Util, Control} from "leaflet"
+import {CRS, Transformation, Canvas, Map, TileLayer, Util, Control, Marker} from "leaflet"
 
 
-export default function AlgotMap() {
+export default function AlgotMap({set}) {
+    
+    
 
   useEffect(()=>{
+
+
+    
     
     console.log("map")
     
@@ -28,6 +33,18 @@ export default function AlgotMap() {
         center: [0, 0],
         zoom: 7
     });
+
+    
+    var marker = L.marker([0, 0], {draggable: true}).addTo(map);
+    marker.on('dragend', function(e) {
+        var position = marker.getLatLng();
+        set({
+            x:position.lat,
+            y:position.lng
+        })
+        console.log("Marker moved to: " + position.lat + ", " + position.lng);
+    });
+
     
     map.whenReady(async () => {
         class MinecraftTileLayer extends TileLayer {

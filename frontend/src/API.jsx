@@ -38,10 +38,55 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
-    const logout = function(callback) {
+    const logout = function() {
         setBearerToken(null)
         localStorage.setItem("creds", null)
         console.log("hopefully logged out", bearerToken)
+    }
+    const submitGuess = function(selectedCoords) {
+        fetch(APIUrl+"/submitGuess", 
+            {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+                body: JSON.stringify({
+                    "guess":selectedCoords,
+                    "challenge":1
+                })
+            }).then((res)=>{
+                return res.json();
+            }).then((res)=>{
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    console.log(res)
+                }
+            })
+    }
+    const getGuess = function(challenge) {
+        fetch(APIUrl+"/submitGuess", 
+            {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+                body: JSON.stringify({
+                    "challenge":1
+                })
+            }).then((res)=>{
+                return res.json();
+            }).then((res)=>{
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    console.log(res)
+                }
+            })
     }
 
     useEffect(() => {
@@ -64,7 +109,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, submitCreds, logout, authUsername}}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, submitCreds, logout, submitGuess, authUsername}}>
             {children}
         </AuthContext.Provider>
     )
