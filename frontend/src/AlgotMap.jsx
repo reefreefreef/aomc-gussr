@@ -3,22 +3,27 @@ import { CRS, Transformation, Canvas, Map, TileLayer, Util, Control, Marker, cir
 import { useAuth } from './API';
 
 
-export default function AlgotMap({ set, setPrevGuess, prevGuess }) {
+export default function AlgotMap({ options }) {
+
+  
+
     const { bearerToken, getGuess } = useAuth();
 
 
     var previousMarker = null;
 
-    useEffect(() => {
-        if (bearerToken) {
-            console.log('gettting')
-            getGuess(1, (e) => {
-                console.log("gotten", e)
-                setPrevGuess(e.previousGuess)
-                console.log(previousMarker)
-            })
-        }
-    }, [bearerToken])
+    if (options.previous) {
+        useEffect(() => {
+            if (bearerToken) {
+                console.log('gettting')
+                getGuess(1, (e) => {
+                    console.log("gotten", e)
+                    options.setPrevious(e.previousGuess)
+                    console.log(previousMarker)
+                })
+            }
+        }, [bearerToken])
+    }
 
     useEffect(() => {
 
@@ -45,20 +50,43 @@ export default function AlgotMap({ set, setPrevGuess, prevGuess }) {
             center: [0, 0],
             zoom: 7
         });
+        
+        if (options.input) {
+            var userSelect = L.marker([0, 0], { draggable: true }).addTo(map);
+            userSelect.on('drag', function (e) {
+                var position = userSelect.getLatLng();
+                options.input({
+                    x: position.lat,
+                    y: position.lng
+                })
+                console.log("Marker moved to: " + position.lat + ", " + position.lng);
+            });
+        }
 
+        if (options.answer) {
+            console.log(options.answer)
+            const answerCoords = JSON.parse(options.answer)
 
-        var userSelect = L.marker([0, 0], { draggable: true }).addTo(map);
-        userSelect.on('dragend', function (e) {
-            var position = userSelect.getLatLng();
-            set({
-                x: position.lat,
-                y: position.lng
-            })
-            console.log("Marker moved to: " + position.lat + ", " + position.lng);
-        });
-        if (prevGuess) {
-            console.log("placing marker at ", prevGuess)
-            var previousSelection = L.circleMarker([prevGuess.x, prevGuess.y], {
+            var previousSelection = L.circleMarker([answerCoords.x, answerCoords.y]).addTo(map);
+
+            previousSelection.bindTooltip("Answer")
+        }
+
+        if (options.otherGuesses) {
+            for (let i = 0; i < options.otherGuesses.length; i++) {
+                const guess = options.otherGuesses[i];
+                const guessCoords = JSON.parse(guess.guess)
+
+                var previousSelection = L.marker([guessCoords.x, guessCoords.x]).addTo(map);
+
+                previousSelection.bindTooltip(guess.user)
+            }
+        }
+
+        
+        if (options.previous) {
+            console.log("placing marker at ", options.previous)
+            var previousSelection = L.circleMarker([options.previous.x, options.previous.y], {
                 fillColor: "#0f0"
             }).addTo(map);
 
@@ -101,7 +129,7 @@ export default function AlgotMap({ set, setPrevGuess, prevGuess }) {
         return () => {
             map.remove();
         };
-    }, [prevGuess]);
+    }, [options.previous]);
 
     return (<div id="map"></div>)
 }

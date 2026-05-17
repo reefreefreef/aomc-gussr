@@ -11,7 +11,6 @@ const app = express();
 app.use(express.json())
 app.use(cors({ origin: 'http://localhost:5173' }));
 
-app.use('/img', express.static('images'));
 
 
 
@@ -20,6 +19,7 @@ app.use('/img', express.static('images'));
 
 const routesDir = path.join(__dirname, 'routes');
 const reverseProxy = "api/"
+
 
 
 function inspectDirectoryForRoutes(routesDir, urlRoute="") {

@@ -34,7 +34,11 @@ export default function GuessSubmission() {
 
     return (
         <div id="guess-content" class="centre-flex">
-            <AlgotMap set={setSelectedCoords} setPrevGuess={setPreviousGuess} prevGuess={previousGuess}/>
+            <AlgotMap options={{
+                input:setSelectedCoords,
+                setPrevious:setPreviousGuess,
+                previous:previousGuess,
+            }} />
             <SubmitButton coords={selectedCoords} updatePrevGuess={setPreviousGuess}/>
         </div>)
 }

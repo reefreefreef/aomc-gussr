@@ -9,7 +9,7 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
     const [bearerToken, setBearerToken] = useState(null);
     const [authUsername, setAuthUsername] = useState(null);
-    const APIUrl = "https://pi.warmsandybeaches.net/api"
+    const APIUrl = "http://localhost:3000/api"
 
     const submitCreds = function(username, password) {
         console.log("submitting ", username, password)
@@ -59,7 +59,6 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({
                     "guess":selectedCoords,
-                    "challenge":1
                 })
             }).then((res)=>{
                 return res.json();
@@ -85,7 +84,28 @@ export const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
-                    "challenge":1
+                })
+            }).then((res)=>{
+                return res.json();
+            }).then((res)=>{
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    console.log(res)
+                    next(res)
+                }
+            })
+    }
+    const getChallenge = function(challenge, next) {
+        fetch(APIUrl+"/getChallenge", 
+            {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify({
+                    challenge:challenge,
                 })
             }).then((res)=>{
                 return res.json();
@@ -119,7 +139,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, submitCreds, logout, submitGuess, getGuess, authUsername}}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername}}>
             {children}
         </AuthContext.Provider>
     )

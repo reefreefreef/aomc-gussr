@@ -1,28 +1,30 @@
-import { useEffect } from 'react';
 import './App.css';
 
-import GuessSubmission from "./GuessSubmission.jsx"
 import Auth from "./Auth.jsx"
-import CurrentImage from "./CurrentImage.jsx"
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+
+import LandingPage from './LandingPage.jsx';
+import ArchivePage from './ArchivePage.jsx';
+
+const router = createBrowserRouter([
+  { path: '/', Component: LandingPage },
+  { path: '/archive', Component: ArchivePage },
+
+]);
 
 function App() {
 
 
   return (
-    <div id="main-content" class="centre-flex">
+    <div>
       <div class="section centre-flex">
         <Auth />
       </div>
-      <div class="section centre-flex">
-        <h2>Where in the server was this image taken?</h2>
-      <CurrentImage />
+      <RouterProvider router={router} />
 
-      </div>
-      <div class="section centre-flex" id="map-section">
-        <GuessSubmission />
+    </div>
 
-      </div>
-
-    </div>)
+    )
 }
 export default App

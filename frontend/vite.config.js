@@ -7,5 +7,5 @@ export default defineConfig({
   server: {
     allowedHosts: ["pi.warmsandybeaches.net"]
   },
-  base: "https://pi.warmsandybeaches.net/guessr",
+  base: "https://pi.warmsandybeaches.net",
 })

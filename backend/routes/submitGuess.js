@@ -20,12 +20,14 @@ router.post('/', async function(req, res) {
     console.log("authed", decoded.username)
     console.log(req.body)
 
+    const current_challenge = parseInt((await db("app_flags").where("key", "current_challenge").select("*"))[0].value)
+
     const guessRow = {
         user: decoded.username,
-        challengeId: req.body.challenge,
+        challengeId: current_challenge,
         guess: JSON.stringify(req.body.guess),
     }
-
+    
     const previousGuesses = await db("guesses").select("*").where("user", guessRow.user).where("challengeId", guessRow.challengeId)
     if (previousGuesses.length>0) {
         await db("guesses").where("user", guessRow.user).where("challengeId", guessRow.challengeId).update("guess", guessRow.guess)

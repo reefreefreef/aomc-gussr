@@ -17,12 +17,9 @@ router.post('/', async function(req, res) {
     if (err) {
       throw Error({ message: 'Invalid or expired token' });
     }
-
-    console.log("authed", decoded.username)
-    console.log(req.body)
-
-    const guesses = await db("guesses").select("*").where("user", decoded.username).where("challengeId", req.body.challenge)
-    console.log(guesses)
+    const current_challenge = parseInt((await db("app_flags").where("key", "current_challenge").select("*"))[0].value)
+    
+    const guesses = await db("guesses").select("*").where("user", decoded.username).where("challengeId", current_challenge)
     if (guesses.length>0) {
         res.status(200).send({
             previousGuess:JSON.parse(guesses[0].guess)
