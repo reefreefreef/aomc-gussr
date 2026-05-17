@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import AlgotMap from "./AlgotMap.jsx"
 import { useAuth } from './API';
 
-function SubmitButton({coords}) {
+function SubmitButton({coords, updatePrevGuess}) {
     const { bearerToken, submitGuess } = useAuth();
+
 
 
     if (bearerToken) {
@@ -11,12 +12,16 @@ function SubmitButton({coords}) {
             <span>
                 <span id="selectedCoords">Selected: ({parseInt(coords.x)}, {parseInt(coords.y)})</span>
                 <button id="selectedSubmit"
-                    onClick={() => submitGuess(coords)}
+                    onClick={() => {
+                        submitGuess(coords);
+                        updatePrevGuess(coords);
+                    }
+                }
                 >Submit Guess</button>
             </span>
         )
     } else {
-        return ""
+        return <h3>Login to submit guess</h3>
     }
 }
 
@@ -24,10 +29,12 @@ function SubmitButton({coords}) {
 export default function GuessSubmission() {
 
     const [selectedCoords, setSelectedCoords] = useState({ x: 0, y: 0 });
+    const [previousGuess, setPreviousGuess] = useState(null)
+
 
     return (
         <div id="guess-content" class="centre-flex">
-            <AlgotMap set={setSelectedCoords} />
-            <SubmitButton coords={selectedCoords}/>
+            <AlgotMap set={setSelectedCoords} setPrevGuess={setPreviousGuess} prevGuess={previousGuess}/>
+            <SubmitButton coords={selectedCoords} updatePrevGuess={setPreviousGuess}/>
         </div>)
 }

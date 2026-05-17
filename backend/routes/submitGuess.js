@@ -9,7 +9,6 @@ const db = require("../db/db.js")
 router.post('/', async function(req, res) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1];
-  console.log(token)
   
   const secret = process.env.JWT_SECRET;
 

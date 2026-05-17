@@ -44,6 +44,11 @@ export const AuthProvider = ({ children }) => {
         console.log("hopefully logged out", bearerToken)
     }
     const submitGuess = function(selectedCoords) {
+        console.log("submitting", bearerToken)
+        if (!bearerToken) {
+            console.error("no auth token")
+            return 0
+        }
         fetch(APIUrl+"/submitGuess", 
             {
                 method: "POST",
@@ -66,8 +71,12 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
-    const getGuess = function(challenge) {
-        fetch(APIUrl+"/submitGuess", 
+    const getGuess = function(challenge, next) {
+        if (!bearerToken) {
+            console.error("no auth token")
+            return 0
+        }
+        fetch(APIUrl+"/getGuess", 
             {
                 method: "POST",
                 headers: { 
@@ -85,6 +94,7 @@ export const AuthProvider = ({ children }) => {
                     alert(res.message)
                 } else {
                     console.log(res)
+                    next(res)
                 }
             })
     }
@@ -109,7 +119,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, submitCreds, logout, submitGuess, authUsername}}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, submitCreds, logout, submitGuess, getGuess, authUsername}}>
             {children}
         </AuthContext.Provider>
     )
