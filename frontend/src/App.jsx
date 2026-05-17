@@ -13,8 +13,8 @@ function App() {
     <Auth />
     <hr />
     <CurrentImage />
+    <AlgotMap />
     
   </div>)
 }
-//<AlgotMap />
 export default App
