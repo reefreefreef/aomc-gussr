@@ -56,8 +56,8 @@ export default function AlgotMap({ options }) {
             userSelect.on('drag', function (e) {
                 var position = userSelect.getLatLng();
                 options.input({
-                    x: position.lat,
-                    y: position.lng
+                    x: -position.lat,
+                    y: -position.lng
                 })
                 
             });
@@ -66,8 +66,8 @@ export default function AlgotMap({ options }) {
         if (options.answer) {
             
             const answerCoords = JSON.parse(options.answer)
-
-            var previousSelection = L.circleMarker([answerCoords.x, answerCoords.y]).addTo(map);
+            console.log(answerCoords)
+            var previousSelection = L.circleMarker([answerCoords.y, answerCoords.x]).addTo(map);
 
             previousSelection.bindTooltip("Answer")
         }
@@ -77,7 +77,7 @@ export default function AlgotMap({ options }) {
                 const guess = options.otherGuesses[i];
                 const guessCoords = JSON.parse(guess.guess)
 
-                var previousSelection = L.marker([guessCoords.x, guessCoords.y]).addTo(map);
+                var previousSelection = L.marker([guessCoords.y, guessCoords.x]).addTo(map);
 
                 previousSelection.bindTooltip(guess.user)
             }
@@ -86,11 +86,11 @@ export default function AlgotMap({ options }) {
         
         if (options.previous) {
             
-            var previousSelection = L.circleMarker([options.previous.x, options.previous.y], {
+            var previousSelection = L.circleMarker([options.previous.y, options.previous.x], {
                 fillColor: "#0f0"
             }).addTo(map);
 
-            map.setView([options.previous.x, options.previous.y])
+            map.setView([options.previous.y, options.previous.x])
 
             previousSelection.bindTooltip("Current Selection")
 
@@ -137,8 +137,8 @@ export default function AlgotMap({ options }) {
 
             if (options.ownGuess) {
             var latlngs = [
-                [options.ownGuess.own.x, options.ownGuess.own.y],
-                [options.ownGuess.answer.x, options.ownGuess.answer.y]
+                [options.ownGuess.own.y, options.ownGuess.own.x],
+                [options.ownGuess.answer.y, options.ownGuess.answer.x]
             ];
 
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);

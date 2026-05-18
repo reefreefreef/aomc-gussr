@@ -43,7 +43,7 @@ function ChallengeInfo({ challengeInfo }) {
                             <tr>
                                 <td>{r(challengeInfo.personalGuess.own.x)}, {r(challengeInfo.personalGuess.own.y)}</td>
                                 <td>{r(challengeInfo.personalGuess.dst)}</td>
-                                <td>_</td>
+                                <td>{r(challengeInfo.personalGuess.score)}/100</td>
                             </tr>
                         </tbody>
 
@@ -64,8 +64,6 @@ function ChallengeInfo({ challengeInfo }) {
                         answer: challengeInfo.answer,
                         otherGuesses: challengeInfo.guesses,
                         ownGuess: challengeInfo.personalGuess,
-                        setPrevious:setSelectedCoords,
-                        previous:selectedCoords,
                     }} />
                 </div>
 

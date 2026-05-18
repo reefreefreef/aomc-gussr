@@ -14,7 +14,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
     if (bearerToken) {
         if (previousGuess) {
             return (
-                <h3>Already Guessed <a
+                <h3>Already Guessed. <a
                 onClick={()=>{
                     getCurrent((e) => {
                         navigate(`/archive?id=${e}`)

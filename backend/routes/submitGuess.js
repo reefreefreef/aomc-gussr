@@ -4,6 +4,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const db = require("../db/db.js")
+const { updateScores } = require("../scores")
+
 
 
 router.post('/', async function(req, res) {
@@ -34,6 +36,9 @@ router.post('/', async function(req, res) {
     } else {
         await db("guesses").insert(guessRow)
     }
+
+    console.log(`${guessRow.user} made guess at ${guessRow.guess}`)
+    updateScores()
 
 
     

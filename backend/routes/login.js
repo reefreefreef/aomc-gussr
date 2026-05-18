@@ -42,6 +42,7 @@ router.post('/', async function(req, res) {
     }
 
     if (passwordValid) {
+      console.log(`${creds.username} logged in`)
       res.status(200).send(JSON.stringify({
         token: jwtLogin(creds.username),
         username: creds.username
@@ -57,6 +58,8 @@ router.post('/', async function(req, res) {
     const hashedPassword = await bcrypt.hash(creds.password, 12);
 
     await db('users').insert({ ...creds, password: hashedPassword });
+
+    console.log(`created account ${creds.username}`)
 
     res.status(200).send(JSON.stringify({
       token: jwtLogin(creds.username),

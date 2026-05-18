@@ -10,7 +10,6 @@ function evaluateScore(guess, answer) {
 }
 
 async function updateScores() {
-    console.log("updating")
     const users = await db("users").select("*")
 
     for (let i = 0; i < users.length; i++) {
@@ -19,7 +18,6 @@ async function updateScores() {
         var userScore = 0
         
         const userGuesses = await db.from("guesses").innerJoin("challenges", "guesses.challengeId", "challenges.id").select("id", "guess", "challenges.answer").where("guesses.user", user.username)
-        console.log(user.username, userGuesses)
 
         for (let j = 0; j < userGuesses.length; j++) {
             const userGuess = userGuesses[j];
@@ -36,7 +34,6 @@ async function updateScores() {
 }
 
 async function getScore(user) {
-    console.log(user)
     return await db("users").select("currentScore").where("username", user)
 }
 

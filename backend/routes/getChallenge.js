@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const db = require("../db/db.js");
+const { evaluateScore } = require("../scores")
 
 async function determinePersonalGuess(username, challenge_info) {
 
@@ -16,11 +17,13 @@ async function determinePersonalGuess(username, challenge_info) {
         
 
         const distance = Math.sqrt((answer.x - ownGuessCoords.x) ** 2 + (answer.y - ownGuessCoords.y) ** 2)
+        const score = evaluateScore(ownGuessCoords, answer)
 
         return {
             own: ownGuessCoords,
             answer: answer,
-            dst: distance
+            dst: distance,
+            score: score
         }
 
 

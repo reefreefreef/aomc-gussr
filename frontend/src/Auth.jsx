@@ -22,7 +22,7 @@ function AuthBar() {
 
                 <button variant="contained"
                     onClick={() => submitCreds(username, password)}
-                    >Login</button>
+                    >Login/Register</button>
         
             </span>
     } else {

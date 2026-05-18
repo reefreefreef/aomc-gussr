@@ -157,7 +157,44 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
+    const getScore = function (user, next) {
+        fetch(APIUrl + "/scores/getScore?user="+user,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
+    const getLeaderboard = function (next) {
+        fetch(APIUrl + "/scores/getLeaderboard",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
 
+    
 
     useEffect(() => {
         var storedToken = localStorage.getItem("creds")
@@ -179,7 +216,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )
