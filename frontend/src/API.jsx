@@ -9,15 +9,16 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
     const [bearerToken, setBearerToken] = useState(null);
     const [authUsername, setAuthUsername] = useState(null);
-    const APIUrl = "http://localhost:3000/api"
+    const [navBarUpdate, setNavBarUpdate] = useState(null);
+    const APIUrl = "https://guessr.warmsandybeaches.net/api"
 
     const submitCreds = function (username, password) {
-        console.log("submitting ", username, password)
+        
 
         fetch(APIUrl + "/login",
             {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+                headers: { "Content-Type": "application/json"},
                 body: JSON.stringify({
                     "username": username,
                     "password": password
@@ -41,10 +42,10 @@ export const AuthProvider = ({ children }) => {
     const logout = function () {
         setBearerToken(null)
         localStorage.setItem("creds", null)
-        console.log("hopefully logged out", bearerToken)
+        
     }
     const submitGuess = function (selectedCoords) {
-        console.log("submitting", bearerToken)
+        
         if (!bearerToken) {
             console.error("no auth token")
             return 0
@@ -54,7 +55,6 @@ export const AuthProvider = ({ children }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
-                    console.log(res)
+                    
                 }
             })
     }
@@ -80,7 +80,6 @@ export const AuthProvider = ({ children }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
@@ -91,7 +90,7 @@ export const AuthProvider = ({ children }) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
-                    console.log(res)
+                    
                     next(res)
                 }
             })
@@ -102,7 +101,6 @@ export const AuthProvider = ({ children }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
                 body: JSON.stringify({
@@ -114,7 +112,7 @@ export const AuthProvider = ({ children }) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
-                    console.log(res)
+                    
                     next(res)
                 }
             })
@@ -125,7 +123,9 @@ export const AuthProvider = ({ children }) => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': `Bearer ${bearerToken}`,
+
+                    
                 }
             }).then((res) => {
                 return res.json();
@@ -133,11 +133,31 @@ export const AuthProvider = ({ children }) => {
                 if (res.error) {
                     alert(res.message)
                 } else {
-                    console.log(res)
+                    
                     next(res)
                 }
             })
     }
+    const getCurrent = function (next) {
+        fetch(APIUrl + "/getCurrent",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    
+                    next(res)
+                }
+            })
+    }
+
 
     useEffect(() => {
         var storedToken = localStorage.getItem("creds")
@@ -149,7 +169,7 @@ export const AuthProvider = ({ children }) => {
                 console.error("malformed stored token")
             }
             if (storedToken != null) {
-                console.log(storedToken)
+                
                 setBearerToken(storedToken.token)
                 setAuthUsername(storedToken.username)
 
@@ -159,7 +179,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername }}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )

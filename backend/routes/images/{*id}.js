@@ -8,10 +8,10 @@ const db = require("../../db/db.js")
 router.get('/', async function (req, res) {
     const url = req.baseUrl.split("/")
     const current_challenge = url[url.length-1]
-    console.log(current_challenge)
+    
 
     const challenge = (await db("challenges").where("id", current_challenge).select("*"))[0]
-    console.log(challenge)
+    
 
     res.sendFile(challenge.imagePath, { root: path.join(__dirname, "../../") }); //placeholder
 

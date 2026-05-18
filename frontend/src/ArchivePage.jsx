@@ -12,14 +12,15 @@ function ChallengeImage({ imagePath }) {
 
 
 function ChallengeInfo({ challengeInfo }) {
-    console.log(challengeInfo)
+    const [selectedCoords, setSelectedCoords] = useState({ x: -9999999, y: 0 });
+    
     if (challengeInfo) {
 
-        if (challengeInfo.revealed) {
+        if (true) {
 
             function r(n) { return Math.round(n) }
             const answer = JSON.parse(challengeInfo.answer)
-            console.log(challengeInfo, answer)
+            
 
             return <div className="centre-flex" id="archivePersonalResults">
 
@@ -63,6 +64,8 @@ function ChallengeInfo({ challengeInfo }) {
                         answer: challengeInfo.answer,
                         otherGuesses: challengeInfo.guesses,
                         ownGuess: challengeInfo.personalGuess,
+                        setPrevious:setSelectedCoords,
+                        previous:selectedCoords,
                     }} />
                 </div>
 
@@ -89,9 +92,12 @@ export default function ArchivePage() {
     const { getChallenge } = useAuth();
 
     useEffect(() => {
-        console.log(getChallenge(id, (e) => {
-            setChallengeInfo(e)
-        }))
+        if (bearerToken!=null) {
+            getChallenge(id, (e) => {
+                        setChallengeInfo(e)
+                    })
+        }
+        
     }, [bearerToken, id])
 
     return (

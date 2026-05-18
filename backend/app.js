@@ -14,11 +14,11 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 
 
 
-
+app.use("/", express.static('/Users/reef/Projects/aomc-gussr/frontend/dist'));
 
 
 const routesDir = path.join(__dirname, 'routes');
-const reverseProxy = "api/"
+const apiRoute = "api/"
 
 
 
@@ -35,7 +35,7 @@ function inspectDirectoryForRoutes(routesDir, urlRoute="") {
         : `/${urlRoute}${path.basename(file, '.js')}`;
     
       const router = require(path.join(routesDir, file));
-      console.log(routePath)
+      
       app.use(routePath, router);
 
 
@@ -47,10 +47,16 @@ function inspectDirectoryForRoutes(routesDir, urlRoute="") {
     
   });
 }
-inspectDirectoryForRoutes(routesDir, urlRoute=reverseProxy)
+inspectDirectoryForRoutes(routesDir, urlRoute=apiRoute)
+
+app.get('/archive', async function(req, res) {
+
+  res.sendFile("index.html", { root: "/Users/reef/Projects/aomc-gussr/frontend/dist" }); //placeholder
+  
+});
 
 
 const port = 3000;
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  
 });

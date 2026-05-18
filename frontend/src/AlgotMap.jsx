@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { CRS, Transformation, Canvas, Map, TileLayer, Util, Control, Marker, circleMarker } from "leaflet"
+import { useEffect, useState, useRef } from 'react';
+import L from "leaflet";
+const { CRS, Transformation, Canvas, TileLayer, Util, Control, Marker, circleMarker } = L;
 import { useAuth } from './API';
 
 
@@ -14,18 +15,23 @@ export default function AlgotMap({ options }) {
 
     useEffect(() => {
         if (bearerToken) {
-            console.log('gettting')
+            
             getGuess(1, (e) => {
-                console.log("gotten", e)
-                if (options.setPrevious) options.setPrevious(e.previousGuess)
+                
+                if (options.setPrevious) {
+                    options.setPrevious(e.previousGuess)
+                }
             })
         }
     }, [bearerToken])
+
+    const mapRef = useRef(null);
+
     
 
     useEffect(() => {
 
-
+        if (!mapRef.current || bearerToken=="null") return;
 
 
         const scaleFactor = 1 / Math.pow(2, 9);
@@ -38,18 +44,14 @@ export default function AlgotMap({ options }) {
             )
         });
 
-        const canvasRenderer = new Canvas({
-            tolerance: 5
-        });
-
-        const map = new Map('map', {
-            renderer: canvasRenderer,
+        const map = L.map(mapRef.current, {
             crs: MinecraftCRS,
             center: [0, 0],
             zoom: 7
         });
+
         
-        if (options.input) {
+        if (options.input && !options.previous) {
             var userSelect = L.marker([0, 0], { draggable: true }).addTo(map);
             userSelect.on('drag', function (e) {
                 var position = userSelect.getLatLng();
@@ -57,12 +59,12 @@ export default function AlgotMap({ options }) {
                     x: position.lat,
                     y: position.lng
                 })
-                console.log("Marker moved to: " + position.lat + ", " + position.lng);
+                
             });
         }
 
         if (options.answer) {
-            console.log(options.answer)
+            
             const answerCoords = JSON.parse(options.answer)
 
             var previousSelection = L.circleMarker([answerCoords.x, answerCoords.y]).addTo(map);
@@ -83,23 +85,23 @@ export default function AlgotMap({ options }) {
 
         
         if (options.previous) {
-            console.log("placing marker at ", options.previous)
+            
             var previousSelection = L.circleMarker([options.previous.x, options.previous.y], {
                 fillColor: "#0f0"
             }).addTo(map);
+
+            map.setView([options.previous.x, options.previous.y])
 
             previousSelection.bindTooltip("Current Selection")
 
         }
 
-        if (options.ownGuess) {
-            var latlngs = [
-                [options.ownGuess.own.x, options.ownGuess.own.y],
-                [options.ownGuess.answer.x, options.ownGuess.answer.y]
-            ];
+        
 
-            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-        }
+
+
+        
+
 
 
 
@@ -132,11 +134,21 @@ export default function AlgotMap({ options }) {
                 attribution: '©AOMC Players',
             })
             tileLayer.addTo(map)
+
+            if (options.ownGuess) {
+            var latlngs = [
+                [options.ownGuess.own.x, options.ownGuess.own.y],
+                [options.ownGuess.answer.x, options.ownGuess.answer.y]
+            ];
+
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+            map.fitBounds(polyline.getBounds().pad(0.5));
+        }
         })
         return () => {
             map.remove();
         };
-    }, [options.previous, options]);
+    }, [options.previous, options.ownGuess, bearerToken]);
 
-    return (<div id="map"></div>)
+    return (<div ref={mapRef} id="map"></div>)
 }

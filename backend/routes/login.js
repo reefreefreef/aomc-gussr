@@ -53,7 +53,7 @@ router.post('/', async function(req, res) {
       }));
     }
   } else {
-    console.log('Creating new user ', creds.username);
+    
     const hashedPassword = await bcrypt.hash(creds.password, 12);
 
     await db('users').insert({ ...creds, password: hashedPassword });

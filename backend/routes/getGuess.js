@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const db = require("../db/db.js")
 
 
+// Adds headers: Access-Control-Allow-Origin: https://guessr.warmsandybeaches.net
 router.post('/', async function(req, res) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1];

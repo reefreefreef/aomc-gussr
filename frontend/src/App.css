@@ -1,3 +1,4 @@
+
 #root {
     min-height: 100vh;
     background-color: var(--background);
@@ -109,7 +110,11 @@ button {
 a:visited {
     color: white;
 } 
-
+a {
+    color: white;
+    cursor: pointer;
+    text-decoration: underline;
+}
 #archivePersonalResults {
     text-align: center;
 }

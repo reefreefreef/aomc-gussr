@@ -17,8 +17,8 @@ router.post('/', async function(req, res) {
       res.status(401).send("nah")
     }
 
-    console.log("authed", decoded.username)
-    console.log(req.body)
+    
+    
 
     await db("app_flags").where("key", "current_challenge").update("value", req.body.challenge)
 
