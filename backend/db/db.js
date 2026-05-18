@@ -1,6 +1,6 @@
 const knex = require('knex');
 const path = require('path');
-const dbFile = path.join(__dirname, 'db.sqlite3');
+const dbFile = process.env.DB
 
 
 module.exports = knex({
