@@ -5,7 +5,7 @@ const { updateScores } = require('../../scores');
 
 router.post('/', async function(req, res) {
 
-    updateScores()
+    //updateScores()
   
     res.status(200).send("good")
     

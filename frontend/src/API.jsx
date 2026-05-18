@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    logout()
                 } else if (res.token) {
                     const token = res.token
                     setBearerToken(token)
@@ -46,10 +47,7 @@ export const AuthProvider = ({ children }) => {
     }
     const submitGuess = function (selectedCoords) {
         
-        if (!bearerToken) {
-            console.error("no auth token")
-            return 0
-        }
+        if (bearerToken) {
         fetch(APIUrl + "/submitGuess",
             {
                 method: "POST",
@@ -65,16 +63,15 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    logout()
                 } else {
                     
                 }
             })
+        }
     }
     const getGuess = function (challenge, next) {
-        if (!bearerToken) {
-            console.error("no auth token")
-            return 0
-        }
+        if (bearerToken) {
         fetch(APIUrl + "/getGuess",
             {
                 method: "POST",
@@ -89,13 +86,16 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    logout()
                 } else {
                     
                     next(res)
                 }
             })
+        }
     }
     const getChallenge = function (challenge, next) {
+        if (bearerToken) {
         fetch(APIUrl + "/getChallenge",
             {
                 method: "POST",
@@ -111,32 +111,38 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    logout()
                 } else {
                     
                     next(res)
                 }
             })
+        }
     }
     const getChallenges = function (next) {
-        fetch(APIUrl + "/getChallenges",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${bearerToken}`,
+        
+        if (bearerToken) {
+            fetch(APIUrl + "/getChallenges",
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${bearerToken}`,
 
-                    
-                }
-            }).then((res) => {
-                return res.json();
-            }).then((res) => {
-                if (res.error) {
-                    alert(res.message)
-                } else {
-                    
-                    next(res)
-                }
-            })
+                        
+                    }
+                }).then((res) => {
+                    return res.json();
+                }).then((res) => {
+                    if (res.error) {
+                        alert(res.message)
+                        logout()
+                    } else {
+                        
+                        next(res)
+                    }
+                })
+            }
     }
     const getCurrent = function (next) {
         fetch(APIUrl + "/getCurrent",

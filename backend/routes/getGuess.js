@@ -16,7 +16,8 @@ router.post('/', async function(req, res) {
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
-      throw Error({ message: 'Invalid or expired token' });
+      res.status(401).send({ error:1, message: 'Invalid or expired token' })
+      return 0;
     }
     const current_challenge = parseInt((await db("app_flags").where("key", "current_challenge").select("*"))[0].value)
     
