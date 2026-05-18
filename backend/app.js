@@ -50,9 +50,10 @@ function inspectDirectoryForRoutes(routesDir, urlRoute="") {
 inspectDirectoryForRoutes(routesDir, urlRoute=apiRoute)
 
 app.get('/archive', async function(req, res) {
-
   res.sendFile("index.html", { root: "/Users/reef/Projects/aomc-gussr/frontend/dist" }); //placeholder
-  
+});
+app.get('/admin', async function(req, res) {
+  res.sendFile("index.html", { root: "/Users/reef/Projects/aomc-gussr/frontend/dist" }); //placeholder
 });
 
 

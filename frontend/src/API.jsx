@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [bearerToken, setBearerToken] = useState(null);
     const [authUsername, setAuthUsername] = useState(null);
     const [navBarUpdate, setNavBarUpdate] = useState(null);
-    const APIUrl = "https://guessr.warmsandybeaches.net/api"
+    const APIUrl = "http://localhost:3000/api" //"https://guessr.warmsandybeaches.net/api"
 
     const submitCreds = function (username, password) {
         
@@ -188,7 +188,51 @@ export const AuthProvider = ({ children }) => {
                 headers: {
                     "Content-Type": "application/json",
                     
+                    
                 }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
+
+    const exeSQL = function (sql, next) {
+        fetch(APIUrl + "/admin/rawSQL",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+                body: JSON.stringify({
+                    sql: sql,
+                })
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
+    const setChallenge = function (id, next) {
+        fetch(APIUrl + "/admin/setChallenge",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+                body: JSON.stringify({
+                    challenge: id,
+                })
             }).then((res) => {
                 return res.json();
             }).then((res) => {
@@ -222,7 +266,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ APIUrl, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )
