@@ -56,8 +56,8 @@ export default function AlgotMap({ options }) {
             userSelect.on('drag', function (e) {
                 var position = userSelect.getLatLng();
                 options.input({
-                    x: -position.lat,
-                    y: -position.lng
+                    x: position.lng,
+                    y: position.lat
                 })
                 
             });
