@@ -14,7 +14,7 @@ app.use(cors({ origin: '*' }));
 
 
 
-app.use("/", express.static('/Users/reef/Projects/aomc-gussr/frontend/dist'));
+app.use("/", express.static(process.env.FRONTEND));
 
 
 const routesDir = path.join(__dirname, 'routes');
@@ -50,10 +50,10 @@ function inspectDirectoryForRoutes(routesDir, urlRoute="") {
 inspectDirectoryForRoutes(routesDir, urlRoute=apiRoute)
 
 app.get('/archive', async function(req, res) {
-  res.sendFile("index.html", { root: "/Users/reef/Projects/aomc-gussr/frontend/dist" }); //placeholder
+  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
 });
 app.get('/admin', async function(req, res) {
-  res.sendFile("index.html", { root: "/Users/reef/Projects/aomc-gussr/frontend/dist" }); //placeholder
+  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
 });
 
 
