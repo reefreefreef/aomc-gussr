@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [bearerToken, setBearerToken] = useState(null);
     const [authUsername, setAuthUsername] = useState(null);
     const [navBarUpdate, setNavBarUpdate] = useState(null);
-    const APIUrl = "https://guessr.warmsandybeaches.net/api"
+    const APIUrl = (window.location.protocol=="http:")?"http://localhost:3000/api":"https://guessr.warmsandybeaches.net/api"
 
     const submitCreds = function (username, password) {
         

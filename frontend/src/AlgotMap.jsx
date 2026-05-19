@@ -61,6 +61,17 @@ export default function AlgotMap({ options }) {
                 })
                 
             });
+
+            map.on('click', function(e) {
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
+                console.log("You clicked the map at " + lat + ", " + lng);
+                userSelect.setLatLng([lat, lng])
+                options.input({
+                    x: lng,
+                    y: lat
+                })
+            });
         }
 
         if (options.answer) {
