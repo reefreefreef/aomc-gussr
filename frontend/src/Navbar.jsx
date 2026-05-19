@@ -41,7 +41,9 @@ export default function NavBar({ router }) {
     
 
     useEffect(() => {
-        getChallenges((e) => {
+        console.log("getting")
+        getChallenges(0, (e) => {
+            console.log("got ", e)
             
             setArchives(e)
         })

@@ -64,11 +64,11 @@ export default function Admin() {
     const [challenges, setChallenges] = useState(undefined);
 
     useEffect(()=>{
-        getChallenges((e) => {
+        getChallenges(true, (e) => {
+          console.log(e)
             setChallenges(e)
-            console.log(e)
         })
-    }, [])
+    }, [bearerToken])
    
     return (
         <div>

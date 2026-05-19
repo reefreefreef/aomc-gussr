@@ -119,10 +119,12 @@ export const AuthProvider = ({ children }) => {
             })
         }
     }
-    const getChallenges = function (next) {
+    const getChallenges = function (full=false, next) {
         
         if (bearerToken) {
-            fetch(APIUrl + "/getChallenges",
+        
+            console.log("fetching challenegs")
+            fetch(`${APIUrl}/getChallenges${(full)?"?full=1":""}`,
                 {
                     method: "GET",
                     headers: {
@@ -132,8 +134,10 @@ export const AuthProvider = ({ children }) => {
                         
                     }
                 }).then((res) => {
+                    console.log("got challenegs", res)
                     return res.json();
                 }).then((res) => {
+                    console.log("got challenegs2", res)
                     if (res.error) {
                         alert(res.message)
                         logout()

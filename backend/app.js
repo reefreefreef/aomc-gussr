@@ -13,7 +13,6 @@ app.use(cors({ origin: '*' }));
 
 
 
-
 app.use("/", express.static(process.env.FRONTEND));
 
 
