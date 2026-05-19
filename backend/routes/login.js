@@ -15,6 +15,9 @@ router.post('/', async function(req, res) {
     }));
   }
 
+
+  creds.username = creds.username.trim()
+
   const users = await db('users').select('*').where('username', creds.username);
 
   function jwtLogin(username) {
