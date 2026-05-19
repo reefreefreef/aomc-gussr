@@ -54,7 +54,7 @@ function ChallengeInfo({ challengeInfo }) {
                 ) : ("")}
 
                 <div style={{marginTop: "50px"}}>
-                    <span>{challengeInfo.title}</span><br />
+                    <span>{challengeInfo.title} <br />Submitted by {challengeInfo.contributor}</span><br />
                     <ChallengeImage imagePath={challengeInfo.id} />
                     
                 </div>

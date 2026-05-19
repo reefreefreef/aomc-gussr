@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from './LandingPage.jsx';
 import ArchivePage from './ArchivePage.jsx';
 import AdminPage from './AdminPage.jsx';
+import ContributionPage from './ContributionPage.jsx';
 
 import Navbar from './Navbar.jsx';
 import Leaderboard from './Leaderboard.jsx';
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
   { path: '/', Component: LandingPage },
   { path: '/archive', Component: ArchivePage },
   { path: '/admin', Component: AdminPage },
+  { path: '/contribute', Component: ContributionPage },
 
 ]);
 

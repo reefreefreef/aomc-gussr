@@ -127,3 +127,6 @@ tbody > tr:nth-of-type(even) {
 table {
     width:100%
 }
+.hidden {
+    display: none;
+}
