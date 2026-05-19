@@ -57,6 +57,9 @@ app.get('/archive', async function (req, res) {
 app.get('/admin', async function (req, res) {
   res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
 });
+app.get('/contribute', async function (req, res) {
+  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
+});
 
 
 
@@ -96,7 +99,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
     const user = decoded.username
     const userData = (await db("users").select("*").where("username", user))
     if (userData.length < 0) return;
-    const userContributer = userData[0].contributer
+    const userContributer = userData[0].contributor
 
     if (!userContributer) {
       res.status(403).send({ error: 1, message: 'not authorised contributer, this has been reported to the admin' })
