@@ -64,7 +64,7 @@ export default function Admin() {
     const [challenges, setChallenges] = useState(undefined);
 
     useEffect(()=>{
-        getChallenges(true, (e) => {
+        getChallenges("full", (e) => {
           console.log(e)
             setChallenges(e)
         })

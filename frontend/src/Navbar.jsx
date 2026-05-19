@@ -32,6 +32,7 @@ function ArchiveList({ archives, router }) {
 
 export default function NavBar({ router }) {
     const [archives, setArchives] = useState(null)
+    const [contributions, setContributions] = useState(null)
 
     const { getChallenges, bearerToken, navBarUpdate } = useAuth();
 
@@ -42,10 +43,15 @@ export default function NavBar({ router }) {
 
     useEffect(() => {
         console.log("getting")
-        getChallenges(0, (e) => {
+        getChallenges("guessed", (e) => {
             console.log("got ", e)
             
             setArchives(e)
+        })
+        getChallenges("contributed", (e) => {
+            console.log("got ", e)
+            
+            setContributions(e)
         })
     }, [bearerToken, navBarUpdate])
 
@@ -58,6 +64,9 @@ export default function NavBar({ router }) {
             <h2>Previous</h2>
 
             <ArchiveList archives={archives} router={router} />
+            <hr />
+            <h2>Submitted</h2>
+            <ArchiveList archives={contributions} router={router} />
 
         </div>
     )

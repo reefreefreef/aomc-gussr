@@ -43,12 +43,17 @@ export default function AlgotMap({ options }) {
                 scaleFactor, 0
             )
         });
-
+        
+        const canvasRenderer = new Canvas({
+  tolerance: 5
+});
         const map = L.map(mapRef.current, {
             crs: MinecraftCRS,
+            renderer:canvasRenderer,
             center: [0, 0],
             zoom: 7
         });
+
 
         
         if (options.input && !options.previous) {
@@ -153,8 +158,13 @@ export default function AlgotMap({ options }) {
             ];
 
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+            console.log(options.ownGuess)
             map.fitBounds(polyline.getBounds().pad(0.5));
         }
+
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 50);
         })
         return () => {
             map.remove();

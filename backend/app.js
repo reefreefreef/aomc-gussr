@@ -62,7 +62,7 @@ app.get('/admin', async function (req, res) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images/'); // Files will be stored in the 'uploads' folder
+    cb(null, process.env.FRONTEND); // Files will be stored in the 'uploads' folder
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -89,6 +89,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
       res.status(401).send({ error: 1, message: 'Invalid or expired token' })
+      fs.unlinkSync(path.join('images/', req.file.filename));
       return 0;
     }
 
@@ -99,6 +100,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
     if (!userContributer) {
       res.status(403).send({ error: 1, message: 'not authorised contributer, this has been reported to the admin' })
+      fs.unlinkSync(path.join('images/', req.file.filename));
       return 0;
     } else {
 

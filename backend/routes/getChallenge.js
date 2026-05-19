@@ -62,16 +62,21 @@ router.post('/', async function (req, res) {
             
 
             const previousGuesses = await db("guesses").select("*").where("user", decoded.username).where("challengeId", challenge_id)
+
+            const contributor = challenge_info.contributor==decoded.username
             
 
-            if (previousGuesses.length > 0) {
+            if (previousGuesses.length > 0 || contributor) {
                 res.send({
                     ...challenge_info,
                     guesses: additionalGuesses,
                     personalGuess: await determinePersonalGuess(decoded.username, challenge_info)
                 })
             } else {
-                res.status(401).send(0)
+                res.status(401).json({
+                    error: true,
+                    message:"you do not have access to this challenge"
+                })
             }
 
 

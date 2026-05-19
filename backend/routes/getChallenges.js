@@ -13,7 +13,7 @@ router.get('/', async function (req, res) {
 
     const secret = process.env.JWT_SECRET;
 
-    const full = req.query.full
+    const type = req.query.type
 
 
     jwt.verify(token, secret, async function (err, decoded) {
@@ -22,8 +22,8 @@ router.get('/', async function (req, res) {
             return 0;
 
         }
-
-        if (full) {
+        console.log(type)
+        if (type=="full") {
             const user = await db("users").select("*").where("username", decoded.username)
             if (user.length < 0) {
                 res.status(500).send("unknown error")
@@ -38,10 +38,14 @@ router.get('/', async function (req, res) {
             const previousGuesses = await db.from("challenges").select("*")
                     res.json(previousGuesses)
 
-        } else {
-            
-            const previousGuesses = await db.from("challenges").innerJoin("guesses", "guesses.challengeId", "challenges.id").select("id", "title").where("guesses.user", decoded.username)
+        } else if (type=="contributed") {
+
+            const previousGuesses = await db.from("challenges").where("contributor", decoded.username)
                     res.json(previousGuesses)
+
+        } else if (type=="guessed") {
+            const previousGuesses = await db.from("challenges").innerJoin("guesses", "guesses.challengeId", "challenges.id").select("id", "title").where("guesses.user", decoded.username)
+            res.json(previousGuesses)
 
         }
 
