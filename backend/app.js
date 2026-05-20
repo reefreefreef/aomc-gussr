@@ -55,6 +55,7 @@ app.get('/archive', async function (req, res) {
   res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
 });
 app.get('/admin', async function (req, res) {
+  //console.log(await getLeastGuessed(5))
   res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
 });
 app.get('/contribute', async function (req, res) {
@@ -163,6 +164,19 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
 
 });
+
+
+const rotationInterval = (1000*60) * 20
+
+const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
+scheduleEvery(rotationInterval, async function(){
+  const leastGuessed = await getLeastGuessed(5)
+  const chosen = leastGuessed[Math.floor(Math.random()*leastGuessed.length)]
+
+  await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
+  
+
+})
 
 
 const port = 3000;
