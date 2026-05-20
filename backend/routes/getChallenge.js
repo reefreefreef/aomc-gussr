@@ -14,7 +14,7 @@ async function determinePersonalGuess(username, challenge_info) {
     if (ownGuess.length > 0) {
         const ownGuessCoords = JSON.parse(ownGuess[0].guess)
 
-        
+
 
         const distance = Math.sqrt((answer.x - ownGuessCoords.x) ** 2 + (answer.y - ownGuessCoords.y) ** 2)
         const score = evaluateScore(ownGuessCoords, answer)
@@ -54,19 +54,24 @@ router.post('/', async function (req, res) {
 
         jwt.verify(token, secret, async function (err, decoded) {
             if (err) {
-                res.status(401).send({ error:1, message: 'Invalid or expired token' })
+                res.status(401).send({ error: 1, message: 'Invalid or expired token' })
                 return 0;
             }
 
 
-            
+            const userCheck = await db("users").select("*").where("username", decoded.username)
+            if (userCheck.length < 0) {
+                userCheck[0]={admin:false}
+            }
+            const adminUser = userCheck[0].admin
+
 
             const previousGuesses = await db("guesses").select("*").where("user", decoded.username).where("challengeId", challenge_id)
 
-            const contributor = challenge_info.contributor==decoded.username
-            
+            const contributor = challenge_info.contributor == decoded.username
 
-            if (previousGuesses.length > 0 || contributor) {
+
+            if (previousGuesses.length > 0 || contributor || adminUser) {
                 res.send({
                     ...challenge_info,
                     guesses: additionalGuesses,
@@ -75,7 +80,7 @@ router.post('/', async function (req, res) {
             } else {
                 res.status(401).json({
                     error: true,
-                    message:"you do not have access to this challenge"
+                    message: "you do not have access to this challenge"
                 })
             }
 

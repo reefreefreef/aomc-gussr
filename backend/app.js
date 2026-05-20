@@ -65,7 +65,7 @@ app.get('/contribute', async function (req, res) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, process.env.FRONTEND); // Files will be stored in the 'uploads' folder
+    cb(null, process.env.IMAGES); // Files will be stored in the 'uploads' folder
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

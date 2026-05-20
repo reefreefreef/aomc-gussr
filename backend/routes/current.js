@@ -11,7 +11,7 @@ router.get('/', async function(req, res) {
   
   const challenge = (await db("challenges").where("id", current_challenge).select("*"))[0]
 
-  res.sendFile(challenge.imagePath, { root: path.join(__dirname, "..") }); //placeholder
+  res.sendFile(challenge.imagePath.replace("images", process.env.IMAGES)); //placeholder
   
 });
 

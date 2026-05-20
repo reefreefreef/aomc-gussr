@@ -119,6 +119,7 @@ a {
 }
 #archivePersonalResults {
     text-align: center;
+    width:100%;
 }
 
 tbody > tr:nth-of-type(even) {
