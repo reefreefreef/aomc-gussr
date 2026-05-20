@@ -44,12 +44,14 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
                                         window.location.reload();
                                         return;
                                     }
-                                    submitGuess(coords);
-                                    updatePrevGuess(coords);
+                                    submitGuess(coords, ()=>{
+                                        navigate(`/archive?id=${e}`)
+                                        setNavBarUpdate(!navBarUpdate)
+                                        updatePrevGuess(coords);
+                                    });
     
                                 
-                                    navigate(`/archive?id=${e}`)
-                                    setNavBarUpdate(!navBarUpdate)
+                                    
                                 })
 
                             }

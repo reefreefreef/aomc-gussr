@@ -92,7 +92,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
-      res.status(401).send({ error: 1, message: 'Invalid or expired token' })
+      res.status(401).send({ resetToken: 1, error: 1, message: 'Invalid or expired token' })
       fs.unlinkSync(path.join('images/', req.file.filename));
       return 0;
     }

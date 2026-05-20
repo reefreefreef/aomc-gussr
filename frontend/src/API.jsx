@@ -27,8 +27,9 @@ export const AuthProvider = ({ children }) => {
                 return res.json();
             }).then((res) => {
                 if (res.error) {
+                    if (res.resetToken) logout()
+
                     alert(res.message)
-                    logout()
                 } else if (res.token) {
                     const token = res.token
                     setBearerToken(token)
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("creds", null)
         
     }
-    const submitGuess = function (selectedCoords) {
+    const submitGuess = function (selectedCoords, callback=()=>{}) {
         
         if (bearerToken) {
         fetch(APIUrl + "/submitGuess",
@@ -63,9 +64,9 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
-                    logout()
+                    if (res.resetToken) logout()
                 } else {
-                    
+                    callback()
                 }
             })
         }
@@ -86,7 +87,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
-                    logout()
+                    if (res.resetToken) logout()
                 } else {
                     
                     next(res)
@@ -111,7 +112,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
-                    logout()
+                    if (res.resetToken) logout()
                 } else {
                     
                     next(res)
@@ -140,7 +141,7 @@ export const AuthProvider = ({ children }) => {
                     console.log("got challenegs2", res)
                     if (res.error) {
                         alert(res.message)
-                        logout()
+                        if (res.resetToken) logout()
                     } else {
                         
                         next(res)
@@ -161,6 +162,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    if (res.resetToken) logout()
                 } else {
                     
                     next(res)
@@ -180,6 +182,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    if (res.resetToken) logout()
                 } else {
                     next(res)
                 }
@@ -199,6 +202,7 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 if (res.error) {
                     alert(res.message)
+                    if (res.resetToken) logout()
                 } else {
                     next(res)
                 }

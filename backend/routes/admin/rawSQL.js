@@ -16,7 +16,7 @@ router.post('/', async function(req, res) {
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
-        res.status(401).send({ error:1, message: 'Invalid or expired token' })
+        res.status(401).send({ resetToken:1, error:1, message: 'Invalid or expired token' })
         return 0;
     }
 

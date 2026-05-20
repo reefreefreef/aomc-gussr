@@ -16,7 +16,7 @@ router.post('/', async function(req, res) {
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
-      res.status(401).send({ error:1, message: 'Invalid or expired token' })
+      res.status(401).send({ resetToken:1, error:1, message: 'Invalid or expired token' })
       return 0;
     }
 
@@ -24,6 +24,14 @@ router.post('/', async function(req, res) {
     
 
     const current_challenge = parseInt((await db("app_flags").where("key", "current_challenge").select("*"))[0].value)
+
+    const challenge_info = await db("challenges").where("id", current_challenge)
+    if (challenge_info.length<1) return;
+
+    if (challenge_info[0].contributor==decoded.username) {
+      res.status(403).send({ error:1, message: 'can\'t submit to your own images' })
+      return 0;
+    }
 
     const guessRow = {
         user: decoded.username,
