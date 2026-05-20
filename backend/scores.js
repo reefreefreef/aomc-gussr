@@ -39,6 +39,11 @@ async function getScore(user) {
 
 async function getLeaderboard() {
     const scores = await db("users").select("username", "currentScore")
+    for(let i in scores) {
+        const otherGuesses = await db("guesses").where("user", scores[i].username)
+
+        scores[i].averageScore = otherGuesses.length>0?scores[i].currentScore/(otherGuesses.length):0
+    }
 
     return scores.sort((a, b)=>{
         return b.currentScore-a.currentScore

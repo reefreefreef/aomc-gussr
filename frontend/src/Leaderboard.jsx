@@ -12,6 +12,7 @@ function LeaderboardTable({ leaderboard }) {
       <th scope="col">#</th>
       <th scope="col">User</th>
       <th scope="col">Score</th>
+      <th scope="col">Avg</th>
     </tr>
   </thead>
   <tbody>
@@ -20,6 +21,7 @@ function LeaderboardTable({ leaderboard }) {
             <th scope="row">{i+1}</th>
             <td>{e.username}</td>
             <td>{Math.round(e.currentScore)}</td>
+            <td>{Math.round(e.averageScore)}</td>
             </tr>
     })}
   </tbody>
