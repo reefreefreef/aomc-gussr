@@ -41,7 +41,8 @@ router.post('/', async function(req, res) {
     
     const previousGuesses = await db("guesses").select("*").where("user", guessRow.user).where("challengeId", guessRow.challengeId)
     if (previousGuesses.length>0) {
-        res.send("already submitted")
+        res.send("already submitted");
+        return;
     } else {
         await db("guesses").insert(guessRow)
     }
