@@ -34,7 +34,6 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
         } else {
             return (
                 <span>
-                    {currentId}
                     <span id="selectedCoords">Selected: ({parseInt(coords.x)}, {parseInt(coords.y)})</span>
                     <button id="selectedSubmit"
                         onClick={() => {
@@ -45,7 +44,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
                                         window.location.reload();
                                         return;
                                     }
-                                    submitGuess(currentId, coords);
+                                    submitGuess(coords);
                                     updatePrevGuess(coords);
     
                                 
