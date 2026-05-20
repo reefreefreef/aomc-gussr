@@ -16,7 +16,7 @@ router.post('/', async function(req, res) {
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
-      res.status(401).send({ resetToken:1, error:1, message: 'Invalid or expired token' })
+      res.status(401).json({ resetToken:1, error:1, message: 'Invalid or expired token' })
       return 0;
     }
 
@@ -29,7 +29,7 @@ router.post('/', async function(req, res) {
     if (challenge_info.length<1) return;
 
     if (challenge_info[0].contributor==decoded.username) {
-      res.status(403).send({ error:1, message: 'can\'t submit to your own images' })
+      res.status(403).json({ error:1, message: 'can\'t submit to your own images' })
       return 0;
     }
 
@@ -53,7 +53,7 @@ router.post('/', async function(req, res) {
     
     
 
-    res.status(200).send("good")
+    res.status(200).json({message:"good"})
 
   });
   
