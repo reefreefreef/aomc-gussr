@@ -90,15 +90,10 @@ body {
 #selectedCoords {
     padding: 10px;
 } 
-#selectedSubmit {
-
-}
 #loggedIn {
     padding: 10px;
 }
-#logout {
 
-}
 
 input {
     background-color: var(--background);

@@ -6,8 +6,16 @@ import { useNavigate } from "react-router";
 
 function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
     const { bearerToken, submitGuess, getCurrent, setNavBarUpdate, navBarUpdate } = useAuth();
+    const [ currentId, setCurrentId ] = useState(null)
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        getCurrent((e) => {
+            console.log(e)
+            setCurrentId(e)
+        })
+    }, [])
 
 
 
@@ -26,16 +34,26 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
         } else {
             return (
                 <span>
+                    {currentId}
                     <span id="selectedCoords">Selected: ({parseInt(coords.x)}, {parseInt(coords.y)})</span>
                     <button id="selectedSubmit"
                         onClick={() => {
-                            submitGuess(coords);
-                            updatePrevGuess(coords);
+                            if (currentId!=null) {
+                                getCurrent((e) => {
+                                    if (e!=currentId) {
+                                        alert("current image has changed, sorry :(");
+                                        window.location.reload();
+                                        return;
+                                    }
+                                    submitGuess(currentId, coords);
+                                    updatePrevGuess(coords);
+    
+                                
+                                    navigate(`/archive?id=${e}`)
+                                    setNavBarUpdate(!navBarUpdate)
+                                })
 
-                            getCurrent((e) => {
-                                navigate(`/archive?id=${e}`)
-                                setNavBarUpdate(!navBarUpdate)
-                            })
+                            }
                         }
                         }
                     >Submit Guess</button>
