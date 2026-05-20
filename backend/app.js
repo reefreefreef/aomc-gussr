@@ -170,7 +170,7 @@ const rotationInterval = (1000*60) * 20
 
 const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){
-  const leastGuessed = await getLeastGuessed(5)
+  const leastGuessed = await getLeastGuessed(20)
   const chosen = leastGuessed[Math.floor(Math.random()*leastGuessed.length)]
 
   await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
