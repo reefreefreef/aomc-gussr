@@ -43,7 +43,7 @@ export default function LandingPage() {
     let previousTime = Infinity
     setInterval(() => {
 
-      const rotationInterval = (1000 * 60) * 20
+      const rotationInterval = (1000 * 60) * 15
 
       const millisecondsLeft = rotationInterval - (new Date().getTime() % rotationInterval)
 

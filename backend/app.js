@@ -168,7 +168,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 });
 
 
-const rotationInterval = (1000*60) * 20
+const rotationInterval = (1000*60) * 15
 
 const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){
