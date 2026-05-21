@@ -25,21 +25,21 @@ function App() {
 
 
   return (
-    <div className="wrapper">
+    <div className="row">
 
-        <div className="sidebar">
+        <div className="col-12 col-md-auto order-3 sidebar sm order-md-1">
             <Navbar router={router}/>
 
         </div>
         
-        <main className="main-content">
+        <main className="col-12 col-md flex-grow-1 order-1 main-content order-md-2">
             <div className="section centre-flex">
                 <Auth />
             </div>
             <RouterProvider router={router} />
         </main>
         
-        <div className="sidebar">
+        <div className="col-12 col-lg-auto sidebar sm order-4 order-md-3">
             <Leaderboard />
 
         </div>

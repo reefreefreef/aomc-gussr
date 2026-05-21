@@ -13,10 +13,7 @@
     border-left: 0.5px solid rgba(255, 255, 255, 0.475);
     border-right: 0.5px solid rgba(255, 255, 255, 0.475);
     overflow-y: auto;
-    
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 70%;
+
 
     min-height: 100vh;
 
@@ -34,10 +31,7 @@
 }
 
 .sidebar {
-    flex-shrink: 1;
-    flex-grow: 1;
-    flex-basis: calc((100vw - 1024px)/2);
-    padding: 30px;
+    padding: 40px;
 }
 
 th {
