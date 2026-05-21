@@ -93,7 +93,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
       res.status(401).send({ resetToken: 1, error: 1, message: 'Invalid or expired token' })
-      fs.unlinkSync(path.join('images/', req.file.filename));
+      fs.unlinkSync(path.join(`${process.env.IMAGES}/`, req.file.filename));
       return 0;
     }
 
@@ -104,7 +104,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
     if (!userContributer) {
       res.status(403).send({ error: 1, message: 'not authorised contributer, this has been reported to the admin' })
-      fs.unlinkSync(path.join('images/', req.file.filename));
+      fs.unlinkSync(path.join(`${process.env.IMAGES}/`, req.file.filename));
       return 0;
     } else {
 
@@ -168,7 +168,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 });
 
 
-const rotationInterval = (1000*60) * 20
+const rotationInterval = (1000*60) * 15
 
 const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){
