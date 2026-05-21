@@ -5,24 +5,34 @@ import { useAuth } from './API';
 import { useNavigate } from "react-router";
 
 function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
-    const { bearerToken, submitGuess, getCurrent, setNavBarUpdate, navBarUpdate } = useAuth();
+    const { bearerToken, authUsername, submitGuess, getCurrent, setNavBarUpdate, navBarUpdate, getChallenge } = useAuth();
     const [ currentId, setCurrentId ] = useState(null)
+    const [ isContributor, setIsContributor ] = useState(false)
 
     const navigate = useNavigate();
 
     useEffect(()=>{
         getCurrent((e) => {
-            console.log(e)
+            console.log("got id", e)
             setCurrentId(e)
+            getChallenge(e, (challenge) => {
+                console.log("got challenge", challenge)
+                if (challenge!=undefined) {
+                    setIsContributor(challenge.contributor==authUsername)
+
+                }
+            })
         })
-    }, [])
+        
+    }, [bearerToken])
 
 
 
     if (bearerToken) {
-        if (previousGuess) {
+        if (previousGuess||isContributor) {
             return (
-                <h3>Already Guessed. <a
+                
+                <h3>{isContributor?"Own image. ":"Already Guessed."}<a
                 onClick={()=>{
                     getCurrent((e) => {
                         navigate(`/archive?id=${e}`)
