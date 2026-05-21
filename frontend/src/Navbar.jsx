@@ -36,21 +36,21 @@ export default function NavBar({ router }) {
 
     const { getChallenges, bearerToken, navBarUpdate } = useAuth();
 
-    
+
 
     const searchParams = new URLSearchParams(window.location.search)
-    
+
 
     useEffect(() => {
         console.log("getting")
         getChallenges("guessed", (e) => {
             console.log("got ", e)
-            
+
             setArchives(e)
         })
         getChallenges("contributed", (e) => {
             console.log("got ", e)
-            
+
             setContributions(e)
         })
     }, [bearerToken, navBarUpdate])
@@ -63,10 +63,14 @@ export default function NavBar({ router }) {
             <hr />
             <h2>Previous</h2>
 
-            <ArchiveList archives={archives} router={router} />
+            <div className="navBarScroll">
+                <ArchiveList archives={archives} router={router} />
+            </div>
             <hr />
             <h2>Submitted</h2>
-            <ArchiveList archives={contributions} router={router} />
+            <div className="navBarScroll">
+                <ArchiveList className="navBarScroll" archives={contributions} router={router} />
+            </div>
 
         </div>
     )

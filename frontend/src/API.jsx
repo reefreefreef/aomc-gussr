@@ -230,6 +230,25 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
+    const getSysLog = function (next) {
+        fetch(APIUrl + "/admin/getLogs",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${bearerToken}`,
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                console.log(res)
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
     const setChallenge = function (id, next) {
         fetch(APIUrl + "/admin/setChallenge",
             {
@@ -274,7 +293,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ APIUrl, getSysLog, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )

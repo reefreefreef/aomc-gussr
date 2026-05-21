@@ -53,7 +53,9 @@ export default function Leaderboard() {
         <div>
             {(authUsername)?<h2>Your Score: <span id="personalScore">{personalScore}</span></h2>:""}
             <hr />
+            <div className="leaderBoardScroll">
             <LeaderboardTable leaderboard={leaderboard} />
+            </div>
         </div>
         
     )

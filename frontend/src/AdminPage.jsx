@@ -59,15 +59,21 @@ export function DataTable({ data }) {
 
 export default function Admin() {
 
-    const { bearerToken, exeSQL, setChallenge, getChallenges } = useAuth();
+    const { bearerToken, exeSQL, setChallenge, getChallenges, getSysLog } = useAuth();
     const [challengeNum, setChallengeNum] = useState(1);
     const [challenges, setChallenges] = useState(undefined);
+    const [systemctlLog, setSystemctlLog] = useState("");
 
     useEffect(()=>{
+      if (bearerToken) {
         getChallenges("full", (e) => {
           console.log(e)
             setChallenges(e)
         })
+        getSysLog((e) => {
+            setSystemctlLog(e.logs)
+        })
+      }
     }, [bearerToken])
    
     return (
@@ -81,15 +87,22 @@ export default function Admin() {
                     document.getElementById("sql-output").textContent = JSON.stringify(e)
                 })
             }}>Execute</button><hr />
-            <p id="sql-output"></p>
+            <p className="adminScroll" id="sql-output"></p>
             <input value={challengeNum} onChange={(e)=>{console.log(e);setChallengeNum(e.target.value)}} id="set-challenge" type="number" /><button
             onClick={()=>{
                 setChallenge(parseInt(document.getElementById("set-challenge").value))
             }}
             >set challenge (id)</button>
             <hr />
-            <div id="challengesTable">
+            <div className="adminScroll" id="challengesTable">
                 <DataTable data={challenges}/>
+            </div>
+            <hr />
+            <div className="adminScroll">
+              <span style={{
+                whiteSpace: "pre-line"
+              }}>{systemctlLog}</span>
+              
             </div>
             
         </div>

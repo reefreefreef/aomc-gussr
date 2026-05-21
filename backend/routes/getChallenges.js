@@ -22,7 +22,6 @@ router.get('/', async function (req, res) {
             return 0;
 
         }
-        console.log(decoded.username, type)
         if (type=="full") {
             const user = await db("users").select("*").where("username", decoded.username)
             if (user.length < 0) {

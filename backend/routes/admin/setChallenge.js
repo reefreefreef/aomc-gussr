@@ -31,7 +31,7 @@ router.post('/', async function(req, res) {
         return 0
       }
     
-    
+    console.log(`${decoded.username} setting challenge to ${req.body.challenge}`)
 
     await db("app_flags").where("key", "current_challenge").update("value", req.body.challenge)
 

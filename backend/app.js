@@ -150,6 +150,8 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
         contributor:user,
       }
 
+      console.log(`${newChallenge.contributor} uploaded ${newChallenge.title}`)
+
       await db("challenges").insert(newChallenge)
 
 
@@ -172,6 +174,8 @@ const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){
   const leastGuessed = await getLeastGuessed(20)
   const chosen = leastGuessed[Math.floor(Math.random()*leastGuessed.length)]
+
+  console.log(`setting current challenge to ${chosen.id}`)
 
   await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
   

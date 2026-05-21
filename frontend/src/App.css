@@ -147,3 +147,16 @@ Leaflet crispness override */
   image-rendering: pixelated;                 /* CSS4 Proposed  */
   -ms-interpolation-mode: nearest-neighbor;   /* IE8+           */
 }
+
+.adminScroll {
+    max-height: 350px;
+    overflow-y: scroll;
+}
+.navBarScroll {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+.leaderBoardScroll {
+    max-height: 750px;
+    overflow-y: scroll;
+}
