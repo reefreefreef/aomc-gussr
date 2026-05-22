@@ -32,6 +32,8 @@
 
 .sidebar {
     padding: 40px;
+    word-wrap: break-word;
+    width: 350px
 }
 
 th {
