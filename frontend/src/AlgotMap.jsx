@@ -51,10 +51,10 @@ export default function AlgotMap({ options }) {
             crs: MinecraftCRS,
             renderer:canvasRenderer,
             center: [0, 0],
-            zoom: 7
+            zoom: 7,
         });
-
-
+        
+        
         
         if (options.input && !options.previous) {
             var userSelect = L.marker([0, 0], { draggable: true }).addTo(map);
@@ -66,7 +66,7 @@ export default function AlgotMap({ options }) {
                 })
                 
             });
-
+            
             map.on('click', function(e) {
                 var lat = e.latlng.lat;
                 var lng = e.latlng.lng;
@@ -78,49 +78,49 @@ export default function AlgotMap({ options }) {
                 })
             });
         }
-
+        
         if (options.answer) {
             
             const answerCoords = JSON.parse(options.answer)
             console.log(answerCoords)
             var previousSelection = L.circleMarker([answerCoords.y, answerCoords.x]).addTo(map);
-
+            
             previousSelection.bindTooltip("Answer")
         }
-
+        
         if (options.otherGuesses) {
             for (let i = 0; i < options.otherGuesses.length; i++) {
                 const guess = options.otherGuesses[i];
                 const guessCoords = JSON.parse(guess.guess)
-
+                
                 var previousSelection = L.marker([guessCoords.y, guessCoords.x]).addTo(map);
-
+                
                 previousSelection.bindTooltip(guess.user)
             }
         }
-
+        
         
         if (options.previous) {
             
             var previousSelection = L.circleMarker([options.previous.y, options.previous.x], {
                 fillColor: "#0f0"
             }).addTo(map);
-
+            
             map.setView([options.previous.y, options.previous.x])
-
+            
             previousSelection.bindTooltip("Current Selection")
-
+            
         }
-
         
-
-
-
         
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
+        
         map.whenReady(async () => {
             class MinecraftTileLayer extends TileLayer {
                 getTileUrl(coords) {
@@ -128,7 +128,7 @@ export default function AlgotMap({ options }) {
                     const zoomFolder = this.options.maxNativeZoom - coords.z;
                     const subdomains = this.options.subdomains;
                     const index = Math.abs(coords.x + coords.y) % subdomains.length;
-
+                    
                     return Util.template(this._url, {
                         z: zoomFolder,
                         x: coords.x * 512 * (2 ** zoomFolder), // since tiles use top left coordinate as name
@@ -137,17 +137,18 @@ export default function AlgotMap({ options }) {
                     });
                 }
             }
-
-
-
-
-            var tileLayer = new MinecraftTileLayer(`https://aomc-map.game.algot.net/map/overworld/{z}/{x}_{y}.png?s={s}`, {
+            
+            
+            
+            
+            var tileLayer = new MinecraftTileLayer(`https://{s}.map.diorite.xyz/map/overworld/{z}/{x}_{y}.png?s={s}`, {
                 maxNativeZoom: 9,
                 minNativeZoom: 0,
                 maxZoom: 15,
                 minZoom: 0,
                 tileSize: 512,
                 attribution: '©AOMC Players',
+                subdomains:"abcd"
             })
             tileLayer.addTo(map)
 
