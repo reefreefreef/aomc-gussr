@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
             })
         }
     }
-    const getChallenge = function (challenge, next) {
+    const getChallenge = function (challenge, next, bypassAlert=false) {
         if (bearerToken) {
         fetch(APIUrl + `/${challenge}/details`,
             {
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
                 return res.json();
             }).then((res) => {
                 if (res.error) {
-                    alert(res.message)
+                    if (!bypassAlert) alert(res.message)
                     if (res.resetToken) logout()
                 } else {
                     

@@ -21,7 +21,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
                     setIsContributor(challenge.contributor==authUsername)
 
                 }
-            })
+            }, true)
         })
         
     }, [bearerToken])
