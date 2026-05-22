@@ -208,6 +208,45 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
+    const getUserStats = function (user, next) {
+        fetch(APIUrl + "/user/"+user,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                    if (res.resetToken) logout()
+                } else {
+                    next(res)
+                }
+            })
+    }
+    const setRating = function (value) {
+        fetch(APIUrl + "/admin/setChallenge",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${bearerToken}`,
+                },
+                body: JSON.stringify({
+                    score: value,
+                })
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                } else {
+                    next(res)
+                }
+            })
+    }
 
     const exeSQL = function (sql, next) {
         fetch(APIUrl + "/admin/rawSQL",
@@ -293,7 +332,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ APIUrl, getSysLog, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ APIUrl, setRating, getSysLog, getUserStats, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )

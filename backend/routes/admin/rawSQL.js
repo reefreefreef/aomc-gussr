@@ -12,7 +12,7 @@ router.post('/', async function(req, res) {
   
   const secret = process.env.JWT_SECRET;
 
-  console.log("executeing ", req.body.sql)
+  
 
   jwt.verify(token, secret, async function (err, decoded) {
     if (err) {
@@ -32,6 +32,7 @@ router.post('/', async function(req, res) {
       return 0
     }
     
+    console.log(`${decoded.username} executing:`, req.body.sql)
 
     try {
         const sqlOutput = await db.raw(req.body.sql)

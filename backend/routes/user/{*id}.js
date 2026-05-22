@@ -3,14 +3,18 @@ const path = require('path');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const db = require("../db/db.js");
+const db = require("../../db/db.js");
 
 router.get('/', async function (req, res) {
-    const user = req.body.user
+    const url = req.baseUrl.split("/")
+    const username = url[url.length-1]
 
-    const username = req.query.user 
-    if (req.query.user==undefined) {
-        res.send({
+    console.log(url, username)
+
+    
+
+    if (username==undefined) {
+        res.status(400).send({
             error: true,
             message: "user not defined"
         })
@@ -18,14 +22,25 @@ router.get('/', async function (req, res) {
     }
 
     const userStats = await db.raw("select username, currentScore, guessCount, contributionCount from users LEFT JOIN (select user, count(*) as guessCount from guesses group by user) as guessCount ON guessCount.user = users.username LEFT JOIN (select contributor, count(*) as contributionCount from challenges group by contributor) as contributionCount ON contributionCount.contributor = users.username")
-    
 
-    
-        res.send({
-            error: true,
-            message: "challenge not found"
-        })
+
+    for (let i = 0; i < userStats.length; i++) {
+        const userStat = userStats[i];
+
+        if (userStat.username==username) {
+            res.status(200).json(userStat)
+
+            return;
+        }
+        
+        
     }
+    res.status(403).json({
+        error: true,
+        message: "user not found"
+    })
+    
+    
 
 
 

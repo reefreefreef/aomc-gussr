@@ -8,6 +8,7 @@ import LandingPage from './LandingPage.jsx';
 import ArchivePage from './ArchivePage.jsx';
 import AdminPage from './AdminPage.jsx';
 import ContributionPage from './ContributionPage.jsx';
+import StatsPage from './StatsPage.jsx';
 
 import Navbar from './Navbar.jsx';
 import Leaderboard from './Leaderboard.jsx';
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   { path: '/archive', Component: ArchivePage },
   { path: '/admin', Component: AdminPage },
   { path: '/contribute', Component: ContributionPage },
+  { path: '/user/:user', Component: StatsPage },
 
 ]);
 

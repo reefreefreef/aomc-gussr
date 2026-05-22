@@ -1,6 +1,8 @@
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import Rating from '@mui/material/Rating';
+
 import { useAuth } from './API';
 import AlgotMap from './AlgotMap';
 
@@ -13,6 +15,9 @@ function ChallengeImage({ imagePath }) {
 
 function ChallengeInfo({ challengeInfo }) {
     const [selectedCoords, setSelectedCoords] = useState({ x: -9999999, y: 0 });
+    const [userRating, setUserRating] = useState(null);
+
+    const { setRating } = useAuth();
     
     if (challengeInfo) {
 
@@ -55,6 +60,14 @@ function ChallengeInfo({ challengeInfo }) {
 
                 <div style={{marginTop: "50px"}}>
                     <span>{challengeInfo.title} <br />Submitted by {challengeInfo.contributor}</span><br />
+                    <Rating
+                        name="simple-controlled"
+                        value={userRating}
+                        onChange={(event, newValue) => {
+                        setUserRating(newValue);
+                        setRating(newValue);
+                        }}
+                    />
                     <ChallengeImage imagePath={challengeInfo.id} />
                     
                 </div>
