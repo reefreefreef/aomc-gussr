@@ -80,7 +80,7 @@ export default function AlgotMap({ options }) {
         
         if (options.answer) {
             
-            const answerCoords = JSON.parse(options.answer)
+            const answerCoords = options.answer
             var previousSelection = L.circleMarker([answerCoords.y, answerCoords.x]).addTo(map);
             
             previousSelection.bindTooltip("Answer")

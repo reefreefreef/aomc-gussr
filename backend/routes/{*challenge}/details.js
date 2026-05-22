@@ -9,15 +9,16 @@ const { evaluateScore } = require("../../scores.js")
 async function determinePersonalGuess(username, challenge_info) {
 
     const ownGuess = await db("guesses").select("*").where("user", username).where("challengeId", challenge_info.id)
-    const answer = JSON.parse(challenge_info.answer)
+    var answer = challenge_info.answer
 
     if (ownGuess.length > 0) {
         const ownGuessCoords = JSON.parse(ownGuess[0].guess)
 
 
-
         const distance = Math.sqrt((answer.x - ownGuessCoords.x) ** 2 + (answer.y - ownGuessCoords.y) ** 2)
         const score = evaluateScore(ownGuessCoords, answer)
+
+        
 
         return {
             own: ownGuessCoords,
@@ -65,6 +66,13 @@ router.get('/', async function (req, res) {
                 userCheck[0]={admin:false}
             }
             const adminUser = userCheck[0].admin
+
+
+            challenge_info.answer = JSON.parse(challenge_info.answer)
+            challenge_info.answer = {
+                x:challenge_info.answer.x+Math.sign(challenge_info.answer.x)/2,
+                y:challenge_info.answer.y+Math.sign(challenge_info.answer.y)/2
+            }
 
 
             const previousGuesses = await db("guesses").select("*").where("user", decoded.username).where("challengeId", challenge_id)

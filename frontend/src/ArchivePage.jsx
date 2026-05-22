@@ -28,7 +28,7 @@ function ChallengeInfo({ challengeInfo }) {
         if (true) {
 
             function r(n, r=1) { return Math.round(n*(10^r))/(10^r) }
-            const answer = JSON.parse(challengeInfo.answer)
+            const answer = challengeInfo.answer
             
 
             return <div className="centre-flex" id="archivePersonalResults">
@@ -50,9 +50,9 @@ function ChallengeInfo({ challengeInfo }) {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{r(challengeInfo.personalGuess.own.x, 0)}, {r(challengeInfo.personalGuess.own.y, 0)}</td>
-                                <td>{r(challengeInfo.personalGuess.dst, 0)}</td>
-                                <td>{r(challengeInfo.personalGuess.score, 0)}/100</td>
+                                <td>{Math.trunc(challengeInfo.personalGuess.own.x)}, {Math.trunc(challengeInfo.personalGuess.own.y, 0)}</td>
+                                <td>{Math.round(challengeInfo.personalGuess.dst)}</td>
+                                <td>{Math.round(challengeInfo.personalGuess.score)}/100</td>
                             </tr>
                         </tbody>
 

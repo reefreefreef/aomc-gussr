@@ -22,9 +22,15 @@ async function updateScores() {
         for (let j = 0; j < userGuesses.length; j++) {
             const userGuess = userGuesses[j];
 
+            userGuess.answer = JSON.parse(userGuess.answer)
+            userGuess.answer = {
+                x:userGuess.answer.x+Math.sign(userGuess.answer.x)/2,
+                y:userGuess.answer.y+Math.sign(userGuess.answer.y)/2
+            }
+
             userScore += evaluateScore(
                 JSON.parse(userGuess.guess),
-                JSON.parse(userGuess.answer)
+                userGuess.answer
             )
             
         }
