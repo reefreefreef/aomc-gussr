@@ -50,9 +50,9 @@ function ChallengeInfo({ challengeInfo }) {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{r(challengeInfo.personalGuess.own.x)}, {r(challengeInfo.personalGuess.own.y)}</td>
-                                <td>{r(challengeInfo.personalGuess.dst)}</td>
-                                <td>{r(challengeInfo.personalGuess.score)}/100</td>
+                                <td>{r(challengeInfo.personalGuess.own.x, 0)}, {r(challengeInfo.personalGuess.own.y, 0)}</td>
+                                <td>{r(challengeInfo.personalGuess.dst, 0)}</td>
+                                <td>{r(challengeInfo.personalGuess.score, 0)}/100</td>
                             </tr>
                         </tbody>
 
@@ -71,7 +71,8 @@ function ChallengeInfo({ challengeInfo }) {
                         setUserRating(newValue);
                         setRating(challengeInfo.id, newValue);
                         }}
-                    /> (Avg: {r(challengeInfo.averageRating, 2)})
+                    /> (Avg: {r(challengeInfo.averageRating, 0)})
+                    <hr />
                     <ChallengeImage imagePath={challengeInfo.id} />
                     
                 </div>

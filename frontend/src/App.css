@@ -154,3 +154,7 @@ Leaflet crispness override */
     max-height: 750px;
     overflow-y: scroll;
 }
+.MuiRating-root {
+    background-color: var(--background);
+    border-radius: 5px;
+}
