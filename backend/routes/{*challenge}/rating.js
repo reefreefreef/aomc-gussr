@@ -74,8 +74,10 @@ router.post('/', async function(req, res) {
       const previousRatings = await db("ratings").where("user", decoded.username).where("challenge", challengeId)
 
       if (previousRatings.length>0) {
+        console.log("updatign")
         await db("ratings").update("score", req.body.score).where("user", decoded.username).where("challenge", challengeId)
       } else {
+        console.log("creating")
         await db("ratings").insert({
           user:decoded.username,
           challenge:challengeId,

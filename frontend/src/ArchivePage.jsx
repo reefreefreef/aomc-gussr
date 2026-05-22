@@ -18,12 +18,16 @@ function ChallengeInfo({ challengeInfo }) {
     const [userRating, setUserRating] = useState(null);
 
     const { setRating } = useAuth();
+
+    useEffect(()=>{
+        if (challengeInfo!=undefined) setUserRating(challengeInfo.personalRating)
+    }, [challengeInfo])
     
     if (challengeInfo) {
 
         if (true) {
 
-            function r(n) { return Math.round(n) }
+            function r(n, r=1) { return Math.round(n*(10^r))/(10^r) }
             const answer = JSON.parse(challengeInfo.answer)
             
 
@@ -65,9 +69,9 @@ function ChallengeInfo({ challengeInfo }) {
                         value={userRating}
                         onChange={(event, newValue) => {
                         setUserRating(newValue);
-                        setRating(newValue);
+                        setRating(challengeInfo.id, newValue);
                         }}
-                    />
+                    /> (Avg: {r(challengeInfo.averageRating, 2)})
                     <ChallengeImage imagePath={challengeInfo.id} />
                     
                 </div>

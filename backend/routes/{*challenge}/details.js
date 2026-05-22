@@ -3,10 +3,40 @@ const path = require('path');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const db = require("../db/db.js");
+const db = require("../../db/db.js");
+const { evaluateScore } = require("../../scores.js")
 
-router.post('/', async function (req, res) {
-    const challenge_id = req.body.challenge
+async function determinePersonalGuess(username, challenge_info) {
+
+    const ownGuess = await db("guesses").select("*").where("user", username).where("challengeId", challenge_info.id)
+    const answer = JSON.parse(challenge_info.answer)
+
+    if (ownGuess.length > 0) {
+        const ownGuessCoords = JSON.parse(ownGuess[0].guess)
+
+
+
+        const distance = Math.sqrt((answer.x - ownGuessCoords.x) ** 2 + (answer.y - ownGuessCoords.y) ** 2)
+        const score = evaluateScore(ownGuessCoords, answer)
+
+        return {
+            own: ownGuessCoords,
+            answer: answer,
+            dst: distance,
+            score: score
+        }
+
+
+    } else {
+        return null
+    }
+
+}
+
+
+router.get('/', async function (req, res) {
+    const url = req.baseUrl.split("/")
+    const challenge_id = url[url.length-2]
 
     var challenge_info = await db("challenges").select("*").where("id", challenge_id)
 
@@ -41,12 +71,21 @@ router.post('/', async function (req, res) {
 
             const contributor = challenge_info.contributor == decoded.username
 
+            const personalRatings = await db("ratings").where("user", decoded.username).where("challenge", challenge_id)
+            const personalRating = (personalRatings.length>0)?personalRatings[0].score:0
+
+            const averageRatings = await db("ratings").select("challenge").avg({"average":"score"}).groupBy("challenge").where("challenge", challenge_id)
+            const averageRating = (averageRatings.length>0)?averageRatings[0].average:0
+
 
             if (previousGuesses.length > 0 || contributor || adminUser) {
                 res.send({
                     ...challenge_info,
                     guesses: additionalGuesses,
-                    personalGuess: await determinePersonalGuess(decoded.username, challenge_info)
+                    personalGuess: await determinePersonalGuess(decoded.username, challenge_info),
+
+                    personalRating:personalRating,
+                    averageRating:averageRating,
                 })
             } else {
                 res.status(401).json({

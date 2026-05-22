@@ -97,16 +97,13 @@ export const AuthProvider = ({ children }) => {
     }
     const getChallenge = function (challenge, next) {
         if (bearerToken) {
-        fetch(APIUrl + "/getChallenge",
+        fetch(APIUrl + `/${challenge}/details`,
             {
-                method: "POST",
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${bearerToken}`,
                 },
-                body: JSON.stringify({
-                    challenge: challenge,
-                })
             }).then((res) => {
                 return res.json();
             }).then((res) => {
@@ -226,8 +223,8 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
-    const setRating = function (value) {
-        fetch(APIUrl + "/admin/setChallenge",
+    const setRating = function (id, value) {
+        fetch(APIUrl + `/${id}/rating`,
             {
                 method: "POST",
                 headers: {
