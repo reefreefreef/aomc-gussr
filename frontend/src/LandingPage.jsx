@@ -52,7 +52,8 @@ export default function LandingPage() {
       }
       previousTime = millisecondsLeft
 
-      document.getElementById("timeLeft").textContent = `${millisecondsToStr(millisecondsLeft)} remaining`
+      let timeEle = document.getElementById("timeLeft")
+      if (timeEle!=undefined) timeEle.textContent = `${millisecondsToStr(millisecondsLeft)} remaining`
     }, 10);
 
   }, [])

@@ -42,15 +42,11 @@ export default function NavBar({ router }) {
 
 
     useEffect(() => {
-        console.log("getting")
+        ("getting")
         getChallenges("guessed", (e) => {
-            console.log("got ", e)
-
             setArchives(e)
         })
         getChallenges("contributed", (e) => {
-            console.log("got ", e)
-
             setContributions(e)
         })
     }, [bearerToken, navBarUpdate])

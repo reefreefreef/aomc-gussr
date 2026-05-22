@@ -67,7 +67,7 @@ export default function Admin() {
     useEffect(()=>{
       if (bearerToken) {
         getChallenges("full", (e) => {
-          console.log(e)
+          (e)
             setChallenges(e)
         })
         getSysLog((e) => {
@@ -81,14 +81,14 @@ export default function Admin() {
             <textarea name="sql-input" id="sql-input"></textarea>
             <button onClick={()=>{
                 const sql = document.getElementById("sql-input").value
-                console.log(sql)
+                (sql)
                 exeSQL(sql, (e)=>{
-                    console.log(e)
+                    (e)
                     document.getElementById("sql-output").textContent = JSON.stringify(e)
                 })
             }}>Execute</button><hr />
             <p className="adminScroll" id="sql-output"></p>
-            <input value={challengeNum} onChange={(e)=>{console.log(e);setChallengeNum(e.target.value)}} id="set-challenge" type="number" /><button
+            <input value={challengeNum} onChange={(e)=>{setChallengeNum(e.target.value)}} id="set-challenge" type="number" /><button
             onClick={()=>{
                 setChallenge(parseInt(document.getElementById("set-challenge").value))
             }}

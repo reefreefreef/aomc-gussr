@@ -13,10 +13,8 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
 
     useEffect(()=>{
         getCurrent((e) => {
-            console.log("got id", e)
             setCurrentId(e)
             getChallenge(e, (challenge) => {
-                console.log("got challenge", challenge)
                 if (challenge!=undefined) {
                     setIsContributor(challenge.contributor==authUsername)
 

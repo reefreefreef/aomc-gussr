@@ -70,7 +70,6 @@ export default function AlgotMap({ options }) {
             map.on('click', function(e) {
                 var lat = e.latlng.lat;
                 var lng = e.latlng.lng;
-                console.log("You clicked the map at " + lat + ", " + lng);
                 userSelect.setLatLng([lat, lng])
                 options.input({
                     x: lng,
@@ -82,7 +81,6 @@ export default function AlgotMap({ options }) {
         if (options.answer) {
             
             const answerCoords = JSON.parse(options.answer)
-            console.log(answerCoords)
             var previousSelection = L.circleMarker([answerCoords.y, answerCoords.x]).addTo(map);
             
             previousSelection.bindTooltip("Answer")
@@ -159,7 +157,6 @@ export default function AlgotMap({ options }) {
             ];
 
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-            console.log(options.ownGuess)
             map.fitBounds(polyline.getBounds().pad(0.5));
         }
 

@@ -30,7 +30,6 @@ export default function Contribution() {
                 }).then(res =>{
                     return res.json()
                 }).then((res)=>{
-                    console.log(res)
                     if (res.error) {
                         alert(res.message)
                     } else {

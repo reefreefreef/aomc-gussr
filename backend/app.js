@@ -52,14 +52,13 @@ function inspectDirectoryForRoutes(routesDir, urlRoute = "") {
 inspectDirectoryForRoutes(routesDir, urlRoute = apiRoute)
 
 app.get('/archive', async function (req, res) {
-  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
+  res.sendFile("index.html", { root: process.env.FRONTEND }); 
 });
 app.get('/admin', async function (req, res) {
-  //console.log(await getLeastGuessed(5))
-  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
+  res.sendFile("index.html", { root: process.env.FRONTEND }); 
 });
 app.get('/contribute', async function (req, res) {
-  res.sendFile("index.html", { root: process.env.FRONTEND }); //placeholder
+  res.sendFile("index.html", { root: process.env.FRONTEND }); 
 });
 
 

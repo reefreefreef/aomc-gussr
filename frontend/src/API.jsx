@@ -121,7 +121,6 @@ export const AuthProvider = ({ children }) => {
         
         if (bearerToken) {
         
-            console.log("fetching challenegs")
             fetch(`${APIUrl}/getChallenges${(type)?`?type=${type}`:""}`,
                 {
                     method: "GET",
@@ -132,10 +131,8 @@ export const AuthProvider = ({ children }) => {
                         
                     }
                 }).then((res) => {
-                    console.log("got challenegs", res)
                     return res.json();
                 }).then((res) => {
-                    console.log("got challenegs2", res)
                     if (res.error) {
                         alert(res.message)
                         if (res.resetToken) logout()
@@ -277,7 +274,6 @@ export const AuthProvider = ({ children }) => {
             }).then((res) => {
                 return res.json();
             }).then((res) => {
-                console.log(res)
                 if (res.error) {
                     alert(res.message)
                 } else {
