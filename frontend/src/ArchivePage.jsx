@@ -98,7 +98,7 @@ function ChallengeInfo({ challengeInfo }) {
 }
 
 export default function ArchivePage() {
-    const { bearerToken } = useAuth();
+    const { bearerToken, navBarUpdate } = useAuth();
 
     const [searchParams] = useSearchParams()
     const id = searchParams.get("id")

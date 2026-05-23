@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from './API';
 
 function ArchiveList({ archives, router }) {
-    const { bearerToken } = useAuth();
+    const { bearerToken, navBarUpdate, setNavBarUpdate } = useAuth();
+    
 
     if (bearerToken) {
         if (archives) {
@@ -14,7 +15,7 @@ function ArchiveList({ archives, router }) {
                 k += 1
                 return (
                     <p key={k}><a
-                        onClick={() => router.navigate(`/archive?id=${e.id}`)}
+                        onClick={() => {router.navigate(`/archive?id=${e.id}`); setNavBarUpdate(navBarUpdate)}}
                         href="#" >
                         {e.title}
                     </a></p>

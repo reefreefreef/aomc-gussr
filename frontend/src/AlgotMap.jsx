@@ -9,6 +9,7 @@ export default function AlgotMap({ options }) {
   
 
     const { bearerToken, getGuess } = useAuth();
+    
 
 
     var previousMarker = null;
@@ -84,6 +85,8 @@ export default function AlgotMap({ options }) {
             var previousSelection = L.circleMarker([answerCoords.y, answerCoords.x]).addTo(map);
             
             previousSelection.bindTooltip("Answer")
+
+            if (options.answer && !options.ownGuess) map.flyTo(previousSelection.getLatLng());
         }
         
         if (options.otherGuesses) {
@@ -157,7 +160,7 @@ export default function AlgotMap({ options }) {
             ];
 
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-            map.fitBounds(polyline.getBounds().pad(0.5));
+            map.flyToBounds(polyline.getBounds().pad(0.5));
         }
 
         setTimeout(() => {
@@ -167,7 +170,7 @@ export default function AlgotMap({ options }) {
         return () => {
             map.remove();
         };
-    }, [options.previous, options.ownGuess, bearerToken]);
+    }, [options.previous, options.ownGuess, bearerToken, options.answer]);
 
     return (<div ref={mapRef} id="map"></div>)
 }
