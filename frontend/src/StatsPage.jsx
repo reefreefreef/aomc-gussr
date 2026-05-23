@@ -5,8 +5,20 @@ import { useAuth } from './API';
 
 
 function logScale(x) {
-    return -Math.log((100-Math.min(x,100))/100, 10)
+    const a = 1.1//Math.E
+
+    function l(b, c) {return Math.log(b)/Math.log(c)}
+    return -l((100-Math.min(x,100))/100, a)
+    
 }
+function reverseLogScale(x) {
+    const a = 1.1//Math.E
+
+    function l(b, c) {return Math.log(b)/Math.log(c)}
+    return 100-(100*(a**(-x)))//-l((100-Math.min(x,100))/100, a)
+    
+}
+
 
 // credits to claude lol
 function calculateQuartiles(data) {
@@ -55,17 +67,26 @@ export default function StatsPage() {
     useEffect(() => {
         if (userStats==null) return;
 
+        
         const data = calculateQuartiles(userStats.scores)
-
+        
         const canvas = document.getElementById("chartContainer")
+        canvas.width = 1000
         const ctx = canvas.getContext("2d")
 
-        const lineColour = "#fff"
-        const w = canvas.width
-        const h = canvas.height
+        ctx.save()
 
+        const lineColour = "#fff"
+
+        const pd = 15
+
+        const w = canvas.width-(2*pd)
+        const h = canvas.height-(2*pd)
 
         canvas.width = canvas.width
+        ctx.translate(pd, pd)
+
+
 
 
         ctx.lineWidth = 1
@@ -98,7 +119,11 @@ export default function StatsPage() {
                 (i/n)*w, h-((i%2==0)?10:5)
             ])
 
-            ctx.fillText("test", (i/n)*w, h)
+            let text = `${Math.round(reverseLogScale((i/n)*100)*100)/100}`
+            let textWidth = ctx.measureText(text).width
+
+            ctx.fillStyle = lineColour
+            ctx.fillText(text, (i/n)*w   -  (textWidth/2), h-10)
             
         }
 
@@ -121,6 +146,8 @@ export default function StatsPage() {
         //box
         rect([data.median*sc,mh-bh],[data.q3*sc,mh+bh])
         rect([data.q1*sc,mh-bh],[data.median*sc,mh+bh])
+
+        ctx.restore()
 
 
     }, [userStats, user])
@@ -147,7 +174,6 @@ export default function StatsPage() {
                     }}>
                         <canvas id="chartContainer" style={{
                         height: "100px",
-                        width: "100%"
                     }}></canvas>
 
                     </div>
