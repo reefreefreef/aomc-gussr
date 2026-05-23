@@ -4,8 +4,16 @@ import { useParams } from "react-router";
 import { useAuth } from './API';
 
 
+function logScale(x) {
+    return -Math.log((100-Math.min(x,100))/100, 10)
+}
+
 // credits to claude lol
 function calculateQuartiles(data) {
+
+    data = data.map(logScale)
+    
+
     const sorted = [...data].sort((a, b) => a - b);
     const n = sorted.length;
 
@@ -89,6 +97,8 @@ export default function StatsPage() {
             ],[
                 (i/n)*w, h-((i%2==0)?10:5)
             ])
+
+            ctx.fillText("test", (i/n)*w, h)
             
         }
 
@@ -112,14 +122,10 @@ export default function StatsPage() {
         rect([data.median*sc,mh-bh],[data.q3*sc,mh+bh])
         rect([data.q1*sc,mh-bh],[data.median*sc,mh+bh])
 
-        console.log(data)
-
 
     }, [userStats, user])
 
     if (userStats != null) {
-
-        console.log([calculateQuartiles(userStats.scores)])
 
         return (
             <div>

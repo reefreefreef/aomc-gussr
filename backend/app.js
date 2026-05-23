@@ -51,15 +51,10 @@ function inspectDirectoryForRoutes(routesDir, urlRoute = "") {
 }
 inspectDirectoryForRoutes(routesDir, urlRoute = apiRoute)
 
-app.get('/archive', async function (req, res) {
+app.get('/{*a}', async function (req, res) {
   res.sendFile("index.html", { root: process.env.FRONTEND }); 
 });
-app.get('/admin', async function (req, res) {
-  res.sendFile("index.html", { root: process.env.FRONTEND }); 
-});
-app.get('/contribute', async function (req, res) {
-  res.sendFile("index.html", { root: process.env.FRONTEND }); 
-});
+
 
 
 

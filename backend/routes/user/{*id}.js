@@ -33,9 +33,6 @@ async function getUserScores(username) {
 router.get('/', async function (req, res) {
     const url = req.baseUrl.split("/")
     const username = url[url.length-1]
-
-    console.log(url, username)
-
     
 
     if (username==undefined) {
