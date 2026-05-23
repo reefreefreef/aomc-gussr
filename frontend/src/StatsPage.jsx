@@ -156,7 +156,7 @@ export default function StatsPage() {
                                 Contributions Made: {userStats.contributionCount || 0}
                             </p>
                             <p>
-                                Average Contribution Rating: {userStats.contributionRating || 0}
+                                Average Contribution Rating: {Math.round(userStats.contributionRating*100)/100 || 0}
                             </p>
                         </div>
                     ) : (
