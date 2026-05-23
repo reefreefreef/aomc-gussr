@@ -103,7 +103,7 @@ button {
 a:visited {
     color: white;
 } 
-a {
+.underlined {
     color: white;
     cursor: pointer;
     text-decoration: underline;

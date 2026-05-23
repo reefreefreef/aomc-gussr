@@ -14,9 +14,8 @@ function ArchiveList({ archives, router }) {
             return archives.map((e) => {
                 k += 1
                 return (
-                    <p key={k}><a
-                        onClick={() => {router.navigate(`/archive?id=${e.id}`); setNavBarUpdate(navBarUpdate)}}
-                        href="#" >
+                    <p key={k}><a className="underlined"
+                        onClick={() => {router.navigate(`/archive?id=${e.id}`); setNavBarUpdate(navBarUpdate)}}>
                         {e.title}
                     </a></p>
                 )
@@ -54,9 +53,8 @@ export default function NavBar({ router }) {
 
     return (
         <div>
-            <h3><a
-                onClick={() => router.navigate("/", { reloadDocument: 1 })}
-                href="#">Current</a></h3>
+            <h3><a className="underlined"
+                onClick={() => router.navigate("/", { reloadDocument: 1 })}>Current</a></h3>
             <hr />
             <h2>Previous</h2>
 

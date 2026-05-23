@@ -30,7 +30,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
         if (previousGuess||isContributor) {
             return (
                 
-                <h3>{isContributor?"Own image. ":"Already Guessed."}<a
+                <h3>{isContributor?"Own image. ":"Already Guessed. "}<a className="underlined"
                 onClick={()=>{
                     getCurrent((e) => {
                         navigate(`/archive?id=${e}`)
