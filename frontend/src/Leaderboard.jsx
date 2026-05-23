@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 
+
 import { useAuth } from './API';
 
-function LeaderboardTable({ leaderboard }) {
+function LeaderboardTable({ leaderboard, router }) {
     return <div>
             <h2>Leaderboard</h2>
         <table>
@@ -19,7 +20,10 @@ function LeaderboardTable({ leaderboard }) {
                 {leaderboard.map((e, i) => {
                     return <tr>
                         <th scope="row">{i + 1}</th>
-                        <td>{e.username}</td>
+                        <td><a className="underlined"
+                        onClick={() => {router.navigate(`/user/${e.username}`)}}>
+                        {e.username}
+                    </a></td>
                         <td>{Math.round(e.currentScore)}</td>
                         <td>{Math.round(e.averageScore)}</td>
                     </tr>
@@ -30,7 +34,7 @@ function LeaderboardTable({ leaderboard }) {
 }
 
 
-export default function Leaderboard() {
+export default function Leaderboard({ router }) {
     const [personalScore, setPersonalScore] = useState("");
     const [leaderboard, setLeaderboard] = useState([]);
 
@@ -55,7 +59,7 @@ export default function Leaderboard() {
             {(authUsername) ? <h2>Your Score: <span id="personalScore">{personalScore}</span></h2> : ""}
             <hr />
             <div className="leaderBoardScroll">
-                <LeaderboardTable leaderboard={leaderboard} />
+                <LeaderboardTable leaderboard={leaderboard} router={router} />
             </div>
         </div>
 

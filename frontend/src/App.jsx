@@ -42,7 +42,7 @@ function App() {
         </main>
         
         <div className="col-12 col-lg-auto sidebar sm order-4 order-md-3">
-            <Leaderboard />
+            <Leaderboard router={router}/>
 
         </div>
     </div>

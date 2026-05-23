@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import Rating from '@mui/material/Rating';
@@ -18,6 +18,7 @@ function ChallengeInfo({ challengeInfo }) {
     const [userRating, setUserRating] = useState(null);
 
     const { setRating } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(()=>{
         if (challengeInfo!=undefined) setUserRating(challengeInfo.personalRating)
@@ -63,7 +64,10 @@ function ChallengeInfo({ challengeInfo }) {
                 ) : ("")}
 
                 <div style={{marginTop: "50px"}}>
-                    <span>{challengeInfo.title} <br />Submitted by {challengeInfo.contributor}</span><br />
+                    <span>{challengeInfo.title} <br />Submitted by <a className="underlined"
+                        onClick={() => {navigate(`/user/${challengeInfo.contributor}`)}}>
+                        {challengeInfo.contributor}
+                    </a></span><br />
                     <Rating
                         name="simple-controlled"
                         value={userRating}
