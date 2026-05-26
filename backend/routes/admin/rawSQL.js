@@ -37,9 +37,9 @@ router.post('/', async function (req, res) {
 
     console.log(`${decoded.username} executing:`, req.body.sql)
 
-    const sqlOutput = await db.raw(req.body.sql)
     try {
-
+      
+      const sqlOutput = await db.raw(req.body.sql)
       res.status(200).send(sqlOutput)
     } catch (e) {
       res.status(200).send(e)
