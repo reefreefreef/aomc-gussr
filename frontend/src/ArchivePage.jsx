@@ -12,25 +12,64 @@ function ChallengeImage({ imagePath }) {
     return <img src={APIUrl + "/images/" + imagePath} id="current-image" />
 }
 
+function EditContent({ isContributor, challengeInfo }) {
+    const [editing, setEditing] = useState(false);
+
+    const { APIUrl } = useAuth();
+    const uploadUrl = `${APIUrl}/edit`
+
+    if (isContributor) {
+        return (
+            <div>
+
+                <span className='underlined'
+                    onClick={() => {
+                        setEditing(!editing)
+                    }}
+                >[{!editing ? "Edit Submission" : "Hide Edit Submission"}]</span>
+
+                {(editing) ? (
+                    <div>
+                        <hr />
+                        <form method='post' action={""} enctype="multipart/form-data">
+                            <label htmlFor="title">Title: </label> <input type='text' name="title" value={challengeInfo.title}/>
+                            <label htmlFor="x">x: </label><input type='number' name="x" value={challengeInfo.answer.x}/>
+                            <label htmlFor="y">y: </label><input type='number' name="y" value={challengeInfo.answer.x}/>
+                            <hr />
+                            <input type='submit' value={"Submit"}/>
+                        </form>
+                        <hr />
+                        <button>Delete Submission</button>
+                    </div>
+                ) : ""}
+
+            </div>
+        )
+    }
+}
+
 
 function ChallengeInfo({ challengeInfo }) {
     const [selectedCoords, setSelectedCoords] = useState({ x: -9999999, y: 0 });
     const [userRating, setUserRating] = useState(null);
 
-    const { setRating } = useAuth();
+    const { setRating, authUsername } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        if (challengeInfo!=undefined) setUserRating(challengeInfo.personalRating)
+    useEffect(() => {
+        if (challengeInfo != undefined) setUserRating(challengeInfo.personalRating)
     }, [challengeInfo])
-    
+
+
+    const isContributor = (challengeInfo || {}).contributor == authUsername
+
     if (challengeInfo) {
 
         if (true) {
 
-            function r(n, r=1) { return Math.round(n*(10^r))/(10^r) }
+            function r(n, r = 1) { return Math.round(n * (10 ^ r)) / (10 ^ r) }
             const answer = challengeInfo.answer
-            
+
 
             return <div className="centre-flex" id="archivePersonalResults">
 
@@ -39,7 +78,7 @@ function ChallengeInfo({ challengeInfo }) {
                 {(challengeInfo.personalGuess) ? (<span>
 
 
-                    
+
 
                     <table>
                         <thead>
@@ -59,26 +98,26 @@ function ChallengeInfo({ challengeInfo }) {
 
 
                     </table>
-                    </span>
+                </span>
 
                 ) : ("")}
 
-                <div style={{marginTop: "50px"}}>
+                <div style={{ marginTop: "50px" }}>
                     <span>{challengeInfo.title} <br />Submitted by <a className="underlined"
-                        onClick={() => {navigate(`/user/${challengeInfo.contributor}`)}}>
+                        onClick={() => { navigate(`/user/${challengeInfo.contributor}`) }}>
                         {challengeInfo.contributor}
                     </a></span><br />
                     <Rating
                         name="simple-controlled"
                         value={userRating}
                         onChange={(event, newValue) => {
-                        setUserRating(newValue);
-                        setRating(challengeInfo.id, newValue);
+                            setUserRating(newValue);
+                            setRating(challengeInfo.id, newValue);
                         }}
                     /> (Avg: {r(challengeInfo.averageRating, 0)})
                     <hr />
                     <ChallengeImage imagePath={challengeInfo.id} />
-                    
+
                 </div>
 
                 <div id="guess-content" className="centre-flex">
@@ -88,6 +127,8 @@ function ChallengeInfo({ challengeInfo }) {
                         ownGuess: challengeInfo.personalGuess,
                     }} />
                 </div>
+
+                <EditContent isContributor={isContributor} challengeInfo={challengeInfo}/>
 
             </div>
         } else {
@@ -112,12 +153,12 @@ export default function ArchivePage() {
     const { getChallenge } = useAuth();
 
     useEffect(() => {
-        if (bearerToken!=null) {
+        if (bearerToken != null) {
             getChallenge(id, (e) => {
-                        setChallengeInfo(e)
-                    })
+                setChallengeInfo(e)
+            })
         }
-        
+
     }, [bearerToken, id])
 
     return (
