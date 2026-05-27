@@ -14,9 +14,52 @@ function ChallengeImage({ imagePath }) {
 
 function EditContent({ isContributor, challengeInfo }) {
     const [editing, setEditing] = useState(false);
+    
+    const [title, setTitle] = useState(challengeInfo.title);
+    const [x, setX] = useState(challengeInfo.answer.x);
+    const [y, setY] = useState(challengeInfo.answer.y);
 
-    const { APIUrl } = useAuth();
-    const uploadUrl = `${APIUrl}/edit`
+    const { APIUrl, bearerToken, editSubmission, deleteSubmission } = useAuth();
+    const editUrl = `${APIUrl}/${challengeInfo.id}/edit`
+
+    useEffect(() => {
+        
+        if (bearerToken && editing) {
+            
+            const form = document.querySelector('form');
+            console.log("alksjdsa", form)
+            if (!form) return;
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Stop standard form submission
+                
+                var reqBody = {};
+                (new FormData(form)).forEach((value, key) => reqBody[key] = value);
+                console.log(reqBody)
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${bearerToken}`,
+                        'Content-Type': 'application/json', 
+
+                    },
+                    body: JSON.stringify(reqBody)
+                }).then(res => {
+                    return res.json()
+                }).then((res) => {
+                    if (res.error) {
+                        alert(res.message)
+                    } else {
+                        alert("submitted!")
+                        window.location.reload()
+                    }
+
+                })
+
+
+            });
+        }
+    }, [bearerToken, editing])
 
     if (isContributor) {
         return (
@@ -31,15 +74,35 @@ function EditContent({ isContributor, challengeInfo }) {
                 {(editing) ? (
                     <div>
                         <hr />
-                        <form method='post' action={""} enctype="multipart/form-data">
-                            <label htmlFor="title">Title: </label> <input type='text' name="title" value={challengeInfo.title}/>
-                            <label htmlFor="x">x: </label><input type='number' name="x" value={challengeInfo.answer.x}/>
-                            <label htmlFor="y">y: </label><input type='number' name="y" value={challengeInfo.answer.x}/>
+                        <form method='post' action={editUrl} enctype="multipart/form-data">
+                            <label htmlFor="title">Title: </label> <input type='text' name="title" value={title} 
+                            onChange={(e)=>{
+                                setTitle(e.target.value)
+                            }}
+                            />
+                            <br />
+                            <label htmlFor="x">x: </label><input type='number' name="x" value={x} 
+                            onChange={(e)=>{
+                                setX(e.target.value)
+                            }}
+                            />
+                            <label htmlFor="y">y: </label><input type='number' name="y" value={y} 
+                            onChange={(e)=>{
+                                setY(e.target.value)
+                            }}
+                            />
                             <hr />
-                            <input type='submit' value={"Submit"}/>
+                            <input style={{display: "none"}} type='text' name="id" value={challengeInfo.id} />
+                            <input type='submit' value={"Submit"} />
                         </form>
                         <hr />
-                        <button>Delete Submission</button>
+                        <button
+                            onClick={()=>{
+                                deleteSubmission(challengeInfo.id, (e)=>{
+                                    alert(e.message)
+                                })
+                            }}
+                        >Delete Submission</button>
                     </div>
                 ) : ""}
 
@@ -128,7 +191,7 @@ function ChallengeInfo({ challengeInfo }) {
                     }} />
                 </div>
 
-                <EditContent isContributor={isContributor} challengeInfo={challengeInfo}/>
+                <EditContent isContributor={isContributor} challengeInfo={challengeInfo} />
 
             </div>
         } else {
