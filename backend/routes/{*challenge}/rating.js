@@ -3,7 +3,8 @@ const path = require('path');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const db = require("../../db/db.js")
+const db = require("../../db/db.js");
+const { error } = require('console');
 
 
 router.get('/', async function(req, res) {
@@ -67,6 +68,18 @@ router.post('/', async function(req, res) {
     const user = await db("users").select("*").where("username", decoded.username)
       if (user.length<0) {
         res.status(500).send("unknown error")
+        return 0;
+      }
+
+      const challengesInfo = await db("challenges").where("id", challengeId)
+      if (challengesInfo.length<=0) return;
+      const challengeInfo = challengesInfo[0]
+
+      if (challengeInfo.contributor==decoded.username) {
+        res.status(500).send({
+          error:true,
+          message: "cannot review your own submissions"
+        })
         return 0;
       }
       

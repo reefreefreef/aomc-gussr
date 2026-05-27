@@ -14,7 +14,7 @@ function ChallengeImage({ imagePath }) {
 
 function EditContent({ isContributor, challengeInfo }) {
     const [editing, setEditing] = useState(false);
-    
+
     const [title, setTitle] = useState(challengeInfo.title);
     const [x, setX] = useState(challengeInfo.answer.x);
     const [y, setY] = useState(challengeInfo.answer.y);
@@ -23,16 +23,16 @@ function EditContent({ isContributor, challengeInfo }) {
     const editUrl = `${APIUrl}/${challengeInfo.id}/edit`
 
     useEffect(() => {
-        
+
         if (bearerToken) {
-            
+
             const form = document.querySelector('form');
             console.log("alksjdsa", form)
             if (!form) return;
 
             form.addEventListener('submit', async (event) => {
                 event.preventDefault(); // Stop standard form submission
-                
+
                 var reqBody = {};
                 (new FormData(form)).forEach((value, key) => reqBody[key] = value);
                 console.log(reqBody)
@@ -40,7 +40,7 @@ function EditContent({ isContributor, challengeInfo }) {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${bearerToken}`,
-                        'Content-Type': 'application/json', 
+                        'Content-Type': 'application/json',
 
                     },
                     body: JSON.stringify(reqBody)
@@ -75,30 +75,30 @@ function EditContent({ isContributor, challengeInfo }) {
                     <div>
                         <hr />
                         <form method='post' action={editUrl} enctype="multipart/form-data">
-                            <label htmlFor="title">Title: </label> <input type='text' name="title" value={title} 
-                            onChange={(e)=>{
-                                setTitle(e.target.value)
-                            }}
+                            <label htmlFor="title">Title: </label> <input type='text' name="title" value={title}
+                                onChange={(e) => {
+                                    setTitle(e.target.value)
+                                }}
                             />
                             <br />
-                            <label htmlFor="x">x: </label><input type='number' name="x" value={x} 
-                            onChange={(e)=>{
-                                setX(e.target.value)
-                            }}
+                            <label htmlFor="x">x: </label><input type='number' name="x" value={x}
+                                onChange={(e) => {
+                                    setX(e.target.value)
+                                }}
                             />
-                            <label htmlFor="y">y: </label><input type='number' name="y" value={y} 
-                            onChange={(e)=>{
-                                setY(e.target.value)
-                            }}
+                            <label htmlFor="y">y: </label><input type='number' name="y" value={y}
+                                onChange={(e) => {
+                                    setY(e.target.value)
+                                }}
                             />
                             <hr />
-                            <input style={{display: "none"}} type='text' name="id" value={challengeInfo.id} />
+                            <input style={{ display: "none" }} type='text' name="id" value={challengeInfo.id} />
                             <input type='submit' value={"Submit"} />
                         </form>
                         <hr />
                         <button
-                            onClick={()=>{
-                                deleteSubmission(challengeInfo.id, (e)=>{
+                            onClick={() => {
+                                deleteSubmission(challengeInfo.id, (e) => {
                                     alert(e.message)
                                 })
                             }}
@@ -170,14 +170,18 @@ function ChallengeInfo({ challengeInfo }) {
                         onClick={() => { navigate(`/user/${challengeInfo.contributor}`) }}>
                         {challengeInfo.contributor}
                     </a></span><br />
-                    <Rating
-                        name="simple-controlled"
-                        value={userRating}
-                        onChange={(event, newValue) => {
-                            setUserRating(newValue);
-                            setRating(challengeInfo.id, newValue);
-                        }}
-                    /> (Avg: {r(challengeInfo.averageRating, 0)})
+                    {(!isContributor) ? (
+                        <span>
+                            <Rating
+                                name="simple-controlled"
+                                value={userRating}
+                                onChange={(event, newValue) => {
+                                    setUserRating(newValue);
+                                    setRating(challengeInfo.id, newValue);
+                                }}
+                            /> (Avg: {r(challengeInfo.averageRating, 0)})
+                        </span>
+                    ) : ("")}
                     <hr />
                     <ChallengeImage imagePath={challengeInfo.id} />
 
