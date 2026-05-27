@@ -176,6 +176,8 @@ scheduleEvery(rotationInterval, async function(){
 
 })
 
+const { updateScores } = require('./scores');
+updateScores()
 
 const port = 3000;
 app.listen(port, () => {
