@@ -16,7 +16,7 @@ import Leaderboard from './Leaderboard.jsx';
 
 const router = createBrowserRouter([
   { path: '/', Component: LandingPage },
-  { path: '/archive', Component: ArchivePage },
+  { path: '/archive/:id', Component: ArchivePage },
   { path: '/admin', Component: AdminPage },
   { path: '/contribute', Component: ContributionPage },
   { path: '/user/:user', Component: StatsPage },

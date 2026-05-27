@@ -15,7 +15,7 @@ function ArchiveList({ archives, router }) {
                 k += 1
                 return (
                     <p key={k}><a className="underlined"
-                        onClick={() => {router.navigate(`/archive?id=${e.id}`); setNavBarUpdate(navBarUpdate)}}>
+                        onClick={() => {router.navigate(`/archive/${e.id}`); setNavBarUpdate(navBarUpdate)}}>
                         {e.title}
                     </a></p>
                 )

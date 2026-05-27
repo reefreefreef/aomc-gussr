@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import Rating from '@mui/material/Rating';
@@ -208,8 +208,7 @@ function ChallengeInfo({ challengeInfo }) {
 export default function ArchivePage() {
     const { bearerToken, navBarUpdate } = useAuth();
 
-    const [searchParams] = useSearchParams()
-    const id = searchParams.get("id")
+    const { id } = useParams();
 
     const [challengeInfo, setChallengeInfo] = useState(null)
 

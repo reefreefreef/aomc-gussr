@@ -33,7 +33,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
                 <h3>{isContributor?"Own image. ":"Already Guessed. "}<a className="underlined"
                 onClick={()=>{
                     getCurrent((e) => {
-                        navigate(`/archive?id=${e}`)
+                        navigate(`/archive/${e}`)
                         setNavBarUpdate(!navBarUpdate)
                     })
                 }}
@@ -53,7 +53,7 @@ function SubmitButton({ coords, previousGuess, updatePrevGuess }) {
                                         return;
                                     }
                                     submitGuess(coords, ()=>{
-                                        navigate(`/archive?id=${e}`)
+                                        navigate(`/archive/${e}`)
                                         setNavBarUpdate(!navBarUpdate)
                                         updatePrevGuess(coords);
                                     });
