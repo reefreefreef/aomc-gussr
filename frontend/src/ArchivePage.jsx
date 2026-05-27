@@ -24,7 +24,7 @@ function EditContent({ isContributor, challengeInfo }) {
 
     useEffect(() => {
         
-        if (bearerToken && editing) {
+        if (bearerToken) {
             
             const form = document.querySelector('form');
             console.log("alksjdsa", form)
