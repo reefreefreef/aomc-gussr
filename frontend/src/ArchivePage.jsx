@@ -179,9 +179,9 @@ function ChallengeInfo({ challengeInfo }) {
                                     setUserRating(newValue);
                                     setRating(challengeInfo.id, newValue);
                                 }}
-                            /> (Avg: {r(challengeInfo.averageRating, 0)})
+                            />
                         </span>
-                    ) : ("")}
+                    ) : ("")} (Avg: {r(challengeInfo.averageRating, 0)})
                     <hr />
                     <ChallengeImage imagePath={challengeInfo.id} />
 
