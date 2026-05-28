@@ -181,7 +181,7 @@ function ChallengeInfo({ challengeInfo }) {
                                 }}
                             />
                         </span>
-                    ) : ("")} (Avg: {r(challengeInfo.averageRating, 0)})
+                    ) : ("")} (Avg ⭐️: {r(challengeInfo.averageRating, 0)})
                     <hr />
                     <ChallengeImage imagePath={challengeInfo.id} />
 
