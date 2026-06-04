@@ -26,7 +26,7 @@ export default function Lamp() {
         
         socket.on('state_update', function(e) {
             console.log("state updated to ", e)
-            button.style.webkitFilter = e.state=="on"?"invert()":""
+            button.style.webkitFilter = e.state!="on"?"invert()":""
         });
 
 
