@@ -2,7 +2,7 @@ const db = require("./db/db.js")
 
 
 function weightedPick(picks) {
-    return 1
+    console.log(picks)
 }
 
 
@@ -15,11 +15,24 @@ async function getLeastGuessed(count) {
     
     return counts.slice(0, Math.min(counts.length, count))
 }
+async function getLeastRecent(count) {
+    var counts = await db.raw('select id, title, last_shown from challenges')
+
+    counts = counts.sort((a,b)=>{
+        return a.last_shown-b.last_shown
+    })
+    
+    return counts.slice(0, Math.min(counts.length, count))
+}
 
 async function selectChallenge(id) {
     await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
 
     await db("challenges").where("id", id).update("last_shown", (new Date()).getTime())
+}
+
+async function test() {
+    console.log(await getLeastRecent(20))
 }
 
 
@@ -37,4 +50,4 @@ function scheduleEvery(milliseconds, callback) {
     }, 50);
 }
 
-module.exports = {getLeastGuessed:getLeastGuessed, scheduleEvery:scheduleEvery};
+module.exports = {test:test, getLeastGuessed:getLeastGuessed, scheduleEvery:scheduleEvery, selectChallenge:selectChallenge};

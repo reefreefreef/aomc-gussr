@@ -164,12 +164,14 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
 const rotationInterval = (1000*60) * 15
 
-const { getLeastGuessed, scheduleEvery } = require("./scheduler.js")
+const { getLeastGuessed, scheduleEvery, selectChallenge } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){
   const leastGuessed = await getLeastGuessed(20)
   const chosen = leastGuessed[Math.floor(Math.random()*leastGuessed.length)]
 
   console.log(`setting current challenge to ${chosen.id}`)
+
+  selectChallenge(chosen.id)
 
   
   
