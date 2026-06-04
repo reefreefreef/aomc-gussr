@@ -33,7 +33,7 @@ async function getChallengeWeights(count) {
 
 
 async function selectChallenge(id) {
-    await db("app_flags").where("key", "current_challenge").update("value", id)
+    await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
 
     await db("challenges").where("id", id).update("last_shown", (new Date()).getTime())
 }
