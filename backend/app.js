@@ -171,7 +171,7 @@ scheduleEvery(rotationInterval, async function(){
 
   console.log(`setting current challenge to ${chosen.id}`)
 
-  await db("app_flags").where("key", "current_challenge").update("value", chosen.id)
+  
   
 
 })

@@ -12,6 +12,7 @@ import StatsPage from './StatsPage.jsx';
 
 import Navbar from './Navbar.jsx';
 import Leaderboard from './Leaderboard.jsx';
+import Lamp from './Lamp.jsx';
 
 
 const router = createBrowserRouter([
@@ -42,6 +43,7 @@ function App() {
         </main>
         
         <div className="col-12 col-lg-auto sidebar sm order-4 order-md-3">
+            <Lamp />
             <Leaderboard router={router}/>
 
         </div>
