@@ -9,6 +9,8 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
     const [bearerToken, setBearerToken] = useState(null);
     const [authUsername, setAuthUsername] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isContributor, setIsContributor] = useState(false);
     const [navBarUpdate, setNavBarUpdate] = useState(null);
     const APIUrl = (window.location.hostname=="localhost")?"http://localhost:3000/api":"https://guessr.warmsandybeaches.net/api"
 
@@ -42,6 +44,7 @@ export const AuthProvider = ({ children }) => {
             })
     }
     const logout = function () {
+        setAuthUsername(null)
         setBearerToken(null)
         localStorage.setItem("creds", null)
         
@@ -359,9 +362,20 @@ export const AuthProvider = ({ children }) => {
         }
     })
 
+    useEffect(()=>{
+        console.log("username")
+        if (authUsername) {
+            getUserStats(authUsername, (e)=>{
+                setIsAdmin(e.admin)
+                setIsContributor(e.contributor)
+            })
+
+        }
+    }, [authUsername])
+
 
     return (
-        <AuthContext.Provider value={{ APIUrl, setRating, getSysLog, getUserStats, editSubmission, deleteSubmission, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ isContributor, isAdmin, APIUrl, setRating, getSysLog, getUserStats, editSubmission, deleteSubmission, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )

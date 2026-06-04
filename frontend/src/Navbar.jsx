@@ -34,7 +34,7 @@ export default function NavBar({ router }) {
     const [archives, setArchives] = useState(null)
     const [contributions, setContributions] = useState(null)
 
-    const { getChallenges, bearerToken, navBarUpdate } = useAuth();
+    const { getChallenges, bearerToken, navBarUpdate, isContributor, isAdmin, authUsername } = useAuth();
 
 
 
@@ -53,6 +53,27 @@ export default function NavBar({ router }) {
 
     return (
         <div>
+            {((isAdmin||isContributor)&&authUsername)?(
+                <div>
+                    {(isContributor)?(
+                        <span className='underlined'
+                        onClick={() => {router.navigate(`/contribute`)}}
+                        >
+                            Contribute
+                        </span>
+                    ):""}
+                    {(isAdmin&&isContributor)?(" | "):""}
+                    {(isAdmin)?(
+                        <span className='underlined'
+                        onClick={() => {router.navigate(`/admin`)}}
+                        >
+                            Admin Console
+                        </span>
+                    ):""}
+                    
+                    <hr />
+                </div>
+            ):""}
             <h3><a className="underlined"
                 onClick={() => router.navigate("/", { reloadDocument: 1 })}>Current</a></h3>
             <hr />
