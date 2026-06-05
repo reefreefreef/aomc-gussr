@@ -164,7 +164,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
 const rotationInterval = (1000*60) * 10
 
-const { getLeastGuessed, scheduleEvery, selectChallenge, rotateChallenge } = require("./scheduler.js")
+const { scheduleEvery, selectChallenge, rotateChallenge } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function(){await rotateChallenge()})
 setTimeout(async function() {
     await rotateChallenge()

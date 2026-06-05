@@ -10,29 +10,9 @@ function weightedPick(picks) {
     var i, sum = 0, r = Math.random();
     for (i in picks) {
         sum += picks[i].weight/totalWeight;
-        if (r <= sum) return i;
+        if (r <= sum) return picks[i];
     }
     
-}
-
-
-async function getLeastGuessed(count) {
-    var counts = await db.raw('select challenges.id, challenges.title, counts.c from challenges left join (select challengeId, count(*) as c from guesses group by challengeId) as counts on counts.challengeId=challenges.id')
-
-    counts = counts.sort((a, b) => {
-        return a.c - b.c
-    })
-
-    return counts.slice(0, Math.min(counts.length, count))
-}
-async function getLeastRecent(count) {
-    var counts = await db.raw('select id, title, last_shown from challenges')
-
-    counts = counts.sort((a, b) => {
-        return a.last_shown - b.last_shown
-    })
-
-    return counts.slice(0, Math.min(counts.length, count))
 }
 async function getWeights() {
     var counts = await db.raw('select challenges.id, challenges.title, challenges.last_shown, counts.c from challenges left join (select challengeId, count(*) as c from guesses group by challengeId) as counts on counts.challengeId=challenges.id')
@@ -52,18 +32,16 @@ async function getWeights() {
     return counts
 
 }
-
 async function selectChallenge(id) {
     await db("app_flags").where("key", "current_challenge").update("value", id)
 
     await db("challenges").where("id", id).update("last_shown", (new Date()).getTime())
 }
 
-
 async function rotateChallenge() {
     const weights = await getWeights()
 
-    const chosen = weightedPick(weights)
+    const chosen = weightedPick(weights).id
 
     console.log(`setting current challenge to ${chosen}`)
 
@@ -85,4 +63,4 @@ function scheduleEvery(milliseconds, callback) {
     }, 50);
 }
 
-module.exports = { rotateChallenge: rotateChallenge, getLeastGuessed: getLeastGuessed, scheduleEvery: scheduleEvery, selectChallenge: selectChallenge };
+module.exports = { rotateChallenge: rotateChallenge, scheduleEvery: scheduleEvery, selectChallenge: selectChallenge };
