@@ -63,7 +63,6 @@ app.get('/{*a}', async function (req, res) {
       var challengeInfo = await db("challenges").where("id", isArchive[2])
       if (challengeInfo.length > 0) {
         challengeInfo = challengeInfo[0]
-        console.log(challengeInfo)
 
 
 
