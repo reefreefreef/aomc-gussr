@@ -44,7 +44,7 @@ function calculateQuartiles(data) {
         q1: percentile(sorted, 0.25),
         median: percentile(sorted, 0.5),
         q3: percentile(sorted, 0.75),
-        max: sorted[n - 1]
+        max: Math.min(sorted[n - 1], 99.99)
     };
 }
 
