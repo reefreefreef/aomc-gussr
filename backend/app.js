@@ -52,7 +52,39 @@ function inspectDirectoryForRoutes(routesDir, urlRoute = "") {
 inspectDirectoryForRoutes(routesDir, urlRoute = apiRoute)
 
 app.get('/{*a}', async function (req, res) {
-  res.sendFile("index.html", { root: process.env.FRONTEND }); 
+  let html = fs.readFileSync(path.join(process.env.FRONTEND, "index.html"), 'utf8');
+
+  const url = req.originalUrl
+  const isArchive = url.split("/")
+  if (isArchive.length > 2 && isArchive[1] == "archive") {
+
+
+
+      var challengeInfo = await db("challenges").where("id", isArchive[2])
+      if (challengeInfo.length > 0) {
+        challengeInfo = challengeInfo[0]
+        console.log(challengeInfo)
+
+
+
+        html = html.replace(/^.*<meta name="og.*$/gm, '');
+        html = html.replace(/^.*<meta property="og.*$/gm, '');
+
+
+        html = html.replace("<embed-meta-tags-98734/>", `
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="og:title" content="AOMCGuessr Archive" />
+          <meta name="og:description"
+          content='"${challengeInfo.title}" by ${challengeInfo.contributor}' />
+          <meta property="og:image" content="https://guessr.warmsandybeaches.net/api/images/${isArchive[2]}" />
+          `)
+      }
+
+  }
+
+
+
+  res.send(html);
 });
 
 
@@ -102,8 +134,8 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
       return 0;
     } else {
 
-      
-      
+
+
       if (submissionParams.title == "") {
         res.status(400).json({
           error: true,
@@ -112,7 +144,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
       }
       const otherChallengesWithTitle = await db("challenges").select("*").where("title", submissionParams.title)
 
-      if (otherChallengesWithTitle.length>0) {
+      if (otherChallengesWithTitle.length > 0) {
         res.status(400).json({
           error: true,
           message: "submission with that title already exists"
@@ -120,7 +152,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
       }
 
 
-      if (submissionParams.x==undefined || submissionParams.y == undefined || parseFloat(submissionParams.x) == NaN || parseFloat(submissionParams.y) == NaN) {
+      if (submissionParams.x == undefined || submissionParams.y == undefined || parseFloat(submissionParams.x) == NaN || parseFloat(submissionParams.y) == NaN) {
         res.status(400).json({
           error: true,
           message: "invalid answer coordinates"
@@ -135,13 +167,13 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
 
       const newChallenge = {
-        imagePath:`images/${req.file.filename}`,
-        answer:JSON.stringify({
-          x:parseFloat(submissionParams.x),
-          y:parseFloat(submissionParams.y)
+        imagePath: `images/${req.file.filename}`,
+        answer: JSON.stringify({
+          x: parseFloat(submissionParams.x),
+          y: parseFloat(submissionParams.y)
         }),
-        title:submissionParams.title,
-        contributor:user,
+        title: submissionParams.title,
+        contributor: user,
       }
 
       console.log(`${newChallenge.contributor} uploaded ${newChallenge.title}`)
@@ -149,7 +181,7 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
       await db("challenges").insert(newChallenge)
 
 
-      res.json({message:`File uploaded successfully! Filename: ${req.file.filename}`});
+      res.json({ message: `File uploaded successfully! Filename: ${req.file.filename}` });
     }
 
 
@@ -162,12 +194,12 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 });
 
 
-const rotationInterval = (1000*60) * 10
+const rotationInterval = (1000 * 60) * 10
 
 const { scheduleEvery, selectChallenge, rotateChallenge } = require("./scheduler.js")
-scheduleEvery(rotationInterval, async function(){await rotateChallenge()})
-setTimeout(async function() {
-    await rotateChallenge()
+scheduleEvery(rotationInterval, async function () { await rotateChallenge() })
+setTimeout(async function () {
+  await rotateChallenge()
 }, 1);
 
 const { updateScores } = require('./scores');
