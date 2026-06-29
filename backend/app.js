@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 
 const multer = require('multer');
+const ffmpeg = require('fluent-ffmpeg');
 
 const dotenv = require('dotenv');
 const { url } = require('inspector');
@@ -36,7 +37,8 @@ function inspectDirectoryForRoutes(routesDir, urlRoute = "") {
         ? `/${urlRoute}`
         : `/${urlRoute}${path.basename(file, '.js')}`;
 
-      const router = require(path.join(routesDir, file));
+      var router = require(path.join(routesDir, file));
+      if (router.router != undefined) router = router.router
 
       app.use(routePath, router);
 
@@ -60,24 +62,24 @@ app.get('/{*a}', async function (req, res) {
 
 
 
-      var challengeInfo = await db("challenges").where("id", isArchive[2])
-      if (challengeInfo.length > 0) {
-        challengeInfo = challengeInfo[0]
+    var challengeInfo = await db("challenges").where("id", isArchive[2])
+    if (challengeInfo.length > 0) {
+      challengeInfo = challengeInfo[0]
 
 
 
-        html = html.replace(/^.*<meta name="og.*$/gm, '');
-        html = html.replace(/^.*<meta property="og.*$/gm, '');
+      html = html.replace(/^.*<meta name="og.*$/gm, '');
+      html = html.replace(/^.*<meta property="og.*$/gm, '');
 
 
-        html = html.replace("<embed-meta-tags-98734/>", `
+      html = html.replace("<embed-meta-tags-98734/>", `
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="og:title" content="AOMCGuessr Archive" />
           <meta name="og:description"
           content='"${challengeInfo.title}" by ${challengeInfo.contributor}' />
           <meta property="og:image" content="https://guessr.warmsandybeaches.net/api/images/${isArchive[2]}" />
           `)
-      }
+    }
 
   }
 
@@ -104,6 +106,32 @@ const db = require("./db/db.js")
 const jwt = require('jsonwebtoken');
 
 
+function transcodeImage(input, output, maxWidth = 3840) {
+  return new Promise((resolve, reject) => {
+    const vf = `scale=if(gt(iw\\,${maxWidth})\\,${maxWidth}\\,iw):-2`;
+
+    ffmpeg(input)
+      .output(output)
+      .outputOptions([
+        '-lossless 0',    // lossy
+        '-q:v 95',
+        '-compression_level 6',
+      ])
+      .videoFilters(vf)
+
+      .on('end', () => {
+        console.log(`${path.parse(input).name} has been transcoded to webp`);
+        resolve();
+      })
+      .on('error', (err) => {
+        console.error(`Error transcoding file: ${err.message}`);
+        reject(err);
+      })
+      .run();
+  });
+}
+
+
 const upload = multer({ storage: storage });
 app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
@@ -112,6 +140,8 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1];
+
+
 
   const secret = process.env.JWT_SECRET;
 
@@ -177,10 +207,17 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
       console.log(`${newChallenge.contributor} uploaded ${newChallenge.title}`)
 
-      await db("challenges").insert(newChallenge)
+      try {
+        const imageFilePath = path.parse(req.file.filename)
+        if (imageFilePath.ext!=".webp") await transcodeImage(process.env.IMAGES + "/" + imageFilePath.base, process.env.IMAGES + "/" + imageFilePath.name + ".webp");
+        await db("challenges").insert(newChallenge)
+
+        res.status(200).json({ message: `File uploaded and transcoded successfully!` });
+      } catch (transcodeError) {
+        res.status(500).send({ message: transcodeError.message, error: true });
+      }
 
 
-      res.json({ message: `File uploaded successfully! Filename: ${req.file.filename}` });
     }
 
 
@@ -191,6 +228,52 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
 
 
 });
+/*
+setTimeout(async function () {
+  const folderPath = "/media/pi/0CE6-D271/images"
+  const images = fs.readdirSync(folderPath).map(fileName => {
+    return path.join(folderPath, fileName);
+  })
+
+  const webps = new Set()
+  const others = new Set()
+
+
+  for (let i = 0; i < images.length; i++) {
+    const image = images[i];
+    const imgP = path.parse(image)
+    if (imgP.ext == ".webp") {
+      webps.add(imgP.name)
+    } else if (imgP.ext == ".png") {
+      others.add(imgP)
+    }
+  }
+  console.log(`webps: ${webps.size}, pngs: ${others.size}`)
+  var count = -1,
+    skip = true
+  for (const image of others) {
+    count += 1
+    if (skip) {
+      if (image.name=="1781524730262-497206827") {
+
+        skip = false
+        continue
+      } else {
+        continue
+      }
+      
+    }
+
+    console.log("prcessing ", image.name, `${count}/${others.size}`)
+    await transcodeImage(folderPath + "/" + image.base, folderPath + "/" + image.name + ".webp")
+    
+    
+  }
+
+
+
+}, 1);
+*/
 
 
 const rotationInterval = (1000 * 60) * 10
@@ -199,6 +282,7 @@ const { scheduleEvery, selectChallenge, rotateChallenge } = require("./scheduler
 scheduleEvery(rotationInterval, async function () { await rotateChallenge() })
 setTimeout(async function () {
   await rotateChallenge()
+  
 }, 1);
 
 const { updateScores } = require('./scores');
@@ -206,5 +290,5 @@ updateScores()
 
 const port = 3000;
 app.listen(port, () => {
-
+  
 });
