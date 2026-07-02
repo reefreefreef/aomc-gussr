@@ -25,7 +25,7 @@ router.post('/', async function(req, res) {
     const secret = process.env.JWT_SECRET;
 
     return jwt.sign(payload, secret, {
-      expiresIn: '72h'
+      expiresIn: '168h'
     });
   }
 

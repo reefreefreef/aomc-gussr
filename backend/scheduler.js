@@ -25,7 +25,7 @@ async function getWeights() {
         let guessComp = Math.min(20 * (Math.pow((challenge.c || 0) + 1, -0.8)), 20) / 20
 
 
-        challenge.weight = Math.pow(timeComp + guessComp, 10)
+        challenge.weight = Math.pow(timeComp + guessComp, 100)
 
     }
 
