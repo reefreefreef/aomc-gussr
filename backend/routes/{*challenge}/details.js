@@ -14,8 +14,9 @@ async function determinePersonalGuess(username, challenge_info) {
     if (ownGuess.length > 0) {
         var ownGuessCoords = JSON.parse(ownGuess[0].guess)
         if ((username == "MarcosGarro" || username == "reef") && Math.random()>0.95) {
-            ownGuessCoords.x += (Math.pow(Math.random()*10,2)*(Math.random()>0.5?-1:1))
-            ownGuessCoords.y += (Math.pow(Math.random()*10,2)*(Math.random()>0.5?-1:1))
+            let mag = 0.2
+            ownGuessCoords.x += (Math.pow(1+Math.random()*mag,10)*(Math.random()>0.5?-1:1))
+            ownGuessCoords.y += (Math.pow(1+Math.random()*mag,10)*(Math.random()>0.5?-1:1))
         }
         
 
@@ -57,8 +58,6 @@ router.get('/', async function (req, res) {
 
 
 
-        const additionalGuesses = await db("guesses").select("*").where("challengeId", challenge_id)
-
         jwt.verify(token, secret, async function (err, decoded) {
             if (err) {
                 res.status(401).send({ resetToken: 1, error: 1, message: 'Invalid or expired token' })
@@ -90,12 +89,20 @@ router.get('/', async function (req, res) {
             const averageRatings = await db("ratings").select("challenge").avg({"average":"score"}).groupBy("challenge").where("challenge", challenge_id)
             const averageRating = (averageRatings.length>0)?averageRatings[0].average:0
 
+            const personalGuess = await determinePersonalGuess(decoded.username, challenge_info)
+
+            const additionalGuesses = await db("guesses").select("*").where("challengeId", challenge_id)
+            for (let i = 0; i < additionalGuesses.length; i++) {
+                const guess = additionalGuesses[i];
+                if (guess.user==decoded.username) guess.guess = JSON.stringify(personalGuess.own)
+            }
+
 
             if (previousGuesses.length > 0 || contributor || adminUser) {
                 res.send({
                     ...challenge_info,
                     guesses: additionalGuesses,
-                    personalGuess: await determinePersonalGuess(decoded.username, challenge_info),
+                    personalGuess: personalGuess,
 
                     personalRating:personalRating,
                     averageRating:averageRating,
