@@ -13,7 +13,6 @@ async function determinePersonalGuess(username, challenge_info) {
 
     if (ownGuess.length > 0) {
         var ownGuessCoords = JSON.parse(ownGuess[0].guess)
-        ownGuessCoords = JSON.parse(JSON.stringify(answer))
         if ((username == "MarcosGarro" || username == "reef") && Math.random()>0.95) {
             ownGuessCoords.x += (Math.pow(Math.random()*10,2)*(Math.random()>0.5?-1:1))
             ownGuessCoords.y += (Math.pow(Math.random()*10,2)*(Math.random()>0.5?-1:1))
