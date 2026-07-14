@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useAuth } from './API';
+import { useNavigate } from "react-router-dom";
 
 
 export default function Contribution() {
@@ -9,7 +10,7 @@ export default function Contribution() {
     const uploadUrl = `${APIUrl}/upload`
 
 
-
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -34,7 +35,9 @@ export default function Contribution() {
                         alert(res.message)
                     } else {
                         alert("submitted!")
-                        window.location.reload()
+                        console.log(res.challengeId)
+                        
+                        navigate(`/archive/${res.challengeId}`)
                     }
 
                 })

@@ -212,7 +212,9 @@ app.post("/" + apiRoute + 'upload', upload.single('file'), (req, res) => {
         if (imageFilePath.ext!=".webp") await transcodeImage(process.env.IMAGES + "/" + imageFilePath.base, process.env.IMAGES + "/" + imageFilePath.name + ".webp");
         await db("challenges").insert(newChallenge)
 
-        res.status(200).json({ message: `File uploaded and transcoded successfully!` });
+        const challengeId = (await db("challenges").select("*").where("title", submissionParams.title))[0].id
+
+        res.status(200).json({ challengeId:challengeId, message: `File uploaded and transcoded successfully!` });
       } catch (transcodeError) {
         res.status(500).send({ message: transcodeError.message, error: true });
       }

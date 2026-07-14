@@ -34,7 +34,7 @@ router.get('/', async function(req, res) {
     }
     
 
-    exec('journalctl -u aomc-guessr -n 40 --output=cat', (error, stdout, stderr) => {
+    exec('journalctl -u aomc-guessr -n 80 --output=cat', (error, stdout, stderr) => {
   if (error) {
     console.error(`Execution error: ${error.message}`);
     res.status(500).json({
