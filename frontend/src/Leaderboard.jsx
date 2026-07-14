@@ -21,7 +21,7 @@ function LeaderboardTable({ leaderboard, router }) {
                 {leaderboard.map((e, i) => {
                     return <tr>
                         <th scope="row">{i + 1}</th>
-                        <td><a className="underlined"
+                        <td className='leaderboard-name'><a className="underlined"
                         onClick={() => {router.navigate(`/user/${e.username}`)}}>
                         {e.username}
                     </a></td>

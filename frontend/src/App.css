@@ -123,6 +123,11 @@ table {
     display: none;
 }
 
+.leaderboard-name {
+    max-width: 100px;
+}
+
+
 
 /* 
 stolen from https://github.com/algnor/aomc-map/blob/master/frontend/src/style.css once again
