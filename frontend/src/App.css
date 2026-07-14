@@ -153,7 +153,7 @@ Leaflet crispness override */
     overflow-y: scroll;
 }
 .leaderBoardScroll {
-    max-height: 750px;
+    max-height: 980px;
     overflow-y: scroll;
 }
 .MuiRating-root {

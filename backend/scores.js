@@ -51,9 +51,10 @@ async function getLeaderboard() {
         scores[i].averageScore = otherGuesses.length>0?scores[i].currentScore/(otherGuesses.length):0
     }
 
-    return scores.sort((a, b)=>{
+    const board = scores.sort((a, b)=>{
         return b.currentScore-a.currentScore
     })
+    return board.splice(0, Math.min(20, board.length))
 }
 
 

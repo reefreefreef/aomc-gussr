@@ -10,6 +10,8 @@ function ArchiveList({ archives, router }) {
 
     if (bearerToken) {
         if (archives) {
+            archives = archives.sort((a,b)=>{return b.id-a.id})
+
             let k = 0
             return archives.map((e) => {
                 k += 1
