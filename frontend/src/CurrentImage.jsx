@@ -7,6 +7,10 @@ export default function CurrentImage() {
 
 
     return (
-        <img src={APIUrl+"/current"+`?${time}`} id="current-image" />
+        <img src={APIUrl+"/current"+`?${time}`} id="current-image" 
+        onClick={(e)=>{
+            window.open(e.target.src)
+        }}
+        />
     )
 }
