@@ -14,7 +14,7 @@ router.get('/', async function (req, res) {
         weekday: "long",
     }).format(new Date());
 
-    if (currentDay!="Tuesday") {
+    if (currentDay=="Tuesday") {
         
         let coords = await db("challenges").select("answer")
         
