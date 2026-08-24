@@ -287,6 +287,7 @@ const { updateScores } = require('./scores');
 updateScores()
 
 const port = 3000;
+console.log("listening")
 app.listen(port, () => {
   
 });

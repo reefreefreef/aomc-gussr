@@ -9,6 +9,7 @@ import ArchivePage from './ArchivePage.jsx';
 import AdminPage from './AdminPage.jsx';
 import Contribution from './ContributionPage.jsx';
 import StatsPage from './StatsPage.jsx';
+import HeatmapPage from './HeatmapPage.jsx';
 
 import Navbar from './Navbar.jsx';
 import Leaderboard from './Leaderboard.jsx';
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   { path: '/admin', Component: AdminPage },
   { path: '/contribute', Component: Contribution },
   { path: '/user/:user', Component: StatsPage },
+  { path: '/heatmap', Component: HeatmapPage },
 
 ]);
 

@@ -25,8 +25,8 @@ function LeaderboardTable({ leaderboard, router }) {
                         onClick={() => {router.navigate(`/user/${e.username}`)}}>
                         {e.username}
                     </a></td>
-                        <td>{e.username=="MarcosGarro"?67-countdown:Math.round(e.currentScore)}</td>
-                        <td>{e.username=="MarcosGarro"?67-countdown:Math.round(e.averageScore)}</td>
+                        <td>{e.username=="GenTheOwl"?67-countdown:Math.round(e.currentScore)}</td>
+                        <td>{e.username=="GenTheOwl"?67-countdown:Math.round(e.averageScore)}</td>
                     </tr>
                 })}
             </tbody>

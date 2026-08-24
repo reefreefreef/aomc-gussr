@@ -205,6 +205,24 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
+    const getHeatmap = function (next) {
+        fetch(APIUrl + "/heatmap",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }).then((res) => {
+                return res.json();
+            }).then((res) => {
+                if (res.error) {
+                    alert(res.message)
+                    if (res.resetToken) logout()
+                } else {
+                    next(res)
+                }
+            })
+    }
     const getUserStats = function (user, next) {
         fetch(APIUrl + "/user/"+user,
             {
@@ -223,6 +241,9 @@ export const AuthProvider = ({ children }) => {
                 }
             })
     }
+
+
+
     const setRating = function (id, value) {
         fetch(APIUrl + `/${id}/rating`,
             {
@@ -375,7 +396,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ isContributor, isAdmin, APIUrl, setRating, getSysLog, getUserStats, editSubmission, deleteSubmission, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
+        <AuthContext.Provider value={{ isContributor, isAdmin, APIUrl, getHeatmap, setRating, getSysLog, getUserStats, editSubmission, deleteSubmission, bearerToken, setChallenge, exeSQL, getScore, getLeaderboard, getCurrent, getChallenges, getChallenge, submitCreds, logout, submitGuess, getGuess, authUsername, navBarUpdate, setNavBarUpdate }}>
             {children}
         </AuthContext.Provider>
     )
