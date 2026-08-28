@@ -278,7 +278,7 @@ setTimeout(async function () {
 */
 
 
-const rotationInterval = (1000 * 60) * 30
+const rotationInterval = (1000 * 60) * 15
 
 const { scheduleEvery, selectChallenge, rotateChallenge } = require("./scheduler.js")
 scheduleEvery(rotationInterval, async function () { await rotateChallenge() })
