@@ -25,12 +25,17 @@ async function getWeights() {
         let guessComp = Math.min(20 * (Math.pow((challenge.c || 0) + 1, -0.8)), 20) / 20
 
 
-        challenge.weight = Math.pow(timeComp + guessComp, 4)
+        challenge.weight = Math.pow(timeComp*0 + guessComp, 50)
 
     }
 
     return counts
 
+}
+async function getLeastChosenChallenge() {
+    let leastGuessed = await db.raw("select * from challenges order by last_shown desc")
+
+    return leastGuessed[0]["id"]
 }
 async function selectChallenge(id) {
     await db("app_flags").where("key", "current_challenge").update("value", id)
@@ -39,12 +44,20 @@ async function selectChallenge(id) {
 }
 
 async function rotateChallenge() {
-    const weights = await getWeights()
+    var chosen;
+    if (Math.random()>0.5) {
 
-    const chosen = weightedPick(weights).id
+        chosen = await getLeastChosenChallenge()
 
+    } else {
+        const weights = await getWeights()
+    
+        chosen = weightedPick(weights).id
+    
+        
+    }
     console.log(`setting current challenge to ${chosen}`)
-
+    
     selectChallenge(chosen)
 }
 
