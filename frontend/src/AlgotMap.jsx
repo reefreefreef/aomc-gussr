@@ -218,5 +218,5 @@ export default function AlgotMap({ options }) {
     ]);
 
 
-    return (<div ref={mapRef} id="map"></div>)
+    return (<div style={options.combinedStyle}ref={mapRef} id="map"></div>)
 }

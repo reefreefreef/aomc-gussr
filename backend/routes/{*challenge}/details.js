@@ -96,6 +96,7 @@ router.get('/', async function (req, res) {
             for (let i = 0; i < additionalGuesses.length; i++) {
                 const guess = additionalGuesses[i];
                 if (guess.user==decoded.username) guess.guess = JSON.stringify(personalGuess.own)
+                additionalGuesses[i].score = evaluateScore(JSON.parse(guess.guess), challenge_info.answer)
             }
 
 

@@ -12,6 +12,40 @@ function ChallengeImage({ imagePath }) {
     return <img src={APIUrl + "/images/" + imagePath} id="current-image" />
 }
 
+
+function LeaderboardTable({ challengeInfo }) {
+    const navigate = useNavigate();
+    const countdown = Math.floor(((new Date()).getTime() - 1784041068948) / (1000 * 60 * 60))
+    return <div>
+        <h3>Rankings</h3>
+        <div className="leaderBoardScroll">
+            <table>
+                <thead>
+
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {challengeInfo.sort((a, b) => { return b.score - a.score }).map((e, i) => {
+                        return <tr>
+                            <th scope="row">{i + 1}</th>
+                            <td className='leaderboard-name'>
+                                <a className="underlined"
+                                    onClick={() => { navigate(`/user/${e.user}`) }}>
+                                    {e.user}
+                                </a></td>
+                            <td>{Math.round(e.score)}</td>
+                        </tr>
+                    })}
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
 function EditContent({ isContributor, challengeInfo }) {
     const [editing, setEditing] = useState(false);
 
@@ -136,7 +170,9 @@ function ChallengeInfo({ challengeInfo }) {
 
             return <div className="centre-flex" id="archivePersonalResults">
 
-                <h1>Answer: ({answer.x}, {answer.y})</h1>
+
+
+                <h1>Answer: ({Math.trunc(answer.x)}, {Math.trunc(answer.y)})</h1>
 
                 {(challengeInfo.personalGuess) ? (<span>
 
@@ -165,6 +201,13 @@ function ChallengeInfo({ challengeInfo }) {
 
                 ) : ("")}
 
+
+
+
+
+
+
+
                 <div style={{ marginTop: "50px" }}>
                     <span>{challengeInfo.title} <br />Submitted by <a className="underlined"
                         onClick={() => { navigate(`/user/${challengeInfo.contributor}`) }}>
@@ -187,13 +230,28 @@ function ChallengeInfo({ challengeInfo }) {
 
                 </div>
 
-                <div id="guess-content" className="centre-flex">
-                    <AlgotMap options={{
-                        answer: challengeInfo.answer,
-                        otherGuesses: challengeInfo.guesses,
-                        ownGuess: challengeInfo.personalGuess,
-                    }} />
+                <div id="guess-content" className="row align-items-center">
+                    <div class="col-sm-8">
+                        <div>
+                            <AlgotMap options={{
+                                answer: challengeInfo.answer,
+                                otherGuesses: challengeInfo.guesses,
+                                ownGuess: challengeInfo.personalGuess,
+
+                                combinedStyle: {
+                                    width: "100%"
+                                }
+                            }} />
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <LeaderboardTable challengeInfo={challengeInfo.guesses} />
+                    </div>
+
                 </div>
+
+
 
                 <EditContent isContributor={isContributor} challengeInfo={challengeInfo} />
 
