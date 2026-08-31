@@ -25,7 +25,7 @@ async function getWeights() {
         let guessComp = Math.min(20 * (Math.pow((challenge.c || 0) + 1, -0.8)), 20) / 20
 
 
-        challenge.weight = Math.pow(timeComp*0 + guessComp, 50)
+        challenge.weight = Math.pow(timeComp*0 + guessComp, 3)
 
     }
 
@@ -33,7 +33,7 @@ async function getWeights() {
 
 }
 async function getLeastChosenChallenge() {
-    let leastGuessed = await db.raw("select * from challenges order by last_shown desc")
+    let leastGuessed = await db.raw("select * from challenges where last_shown!='null' order by last_shown asc")
 
     return leastGuessed[0]["id"]
 }
